@@ -1,4 +1,7 @@
-sources.iml
+.idea
+*.iml
+*.ipr
+*.iws
 .idea
 build
 classes
