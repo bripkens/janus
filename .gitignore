@@ -1,2 +1,5 @@
 sources.iml
 .idea
+build
+classes
+.gradle/
