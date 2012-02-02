@@ -1,4 +1,4 @@
-package de.codecentric.janus
+package de.codecentric.janus.conf
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>

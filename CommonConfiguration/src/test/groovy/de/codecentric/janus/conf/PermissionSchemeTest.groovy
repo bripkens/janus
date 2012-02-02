@@ -1,9 +1,10 @@
-package de.codecentric.janus
+package de.codecentric.janus.conf
 
 import org.junit.Before
 import org.junit.Test
 import static org.junit.Assert.assertThat
-import static org.hamcrest.CoreMatchers.*
+
+import de.codecentric.janus.conf.PermissionScheme
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
