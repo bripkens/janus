@@ -1,13 +1,13 @@
 package de.codecentric.janus.scaffold
 
 import org.codehaus.jackson.map.ObjectMapper
+import static de.codecentric.janus.settings.FileSystem.CONFIG_DIR
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
  */
 class Catalog {
-    static final CONFIG_DIR = '.janus'
-    static final SCAFFOLD_DIR =  CONFIG_DIR +
+    static final SCAFFOLD_DIR = CONFIG_DIR +
             File.separator + 'scaffolds'
     static final CATALOG_FILE = SCAFFOLD_DIR +
             File.separator + 'catalog.json'

@@ -3,6 +3,8 @@ group = 'de.codecentric'
 
 apply plugin: 'idea'
 
+
+
 subprojects {
     apply plugin: 'groovy'
     apply plugin: 'idea'
