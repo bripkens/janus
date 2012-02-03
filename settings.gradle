@@ -1,1 +1,4 @@
-include 'CommonConfiguration'
+include 'CommonConfiguration',
+        'ContinuousIntegration',
+        'ContinuousIntegration:CommonConfiguration',
+        'ContinuousIntegration:JenkinsCI'
