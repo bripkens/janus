@@ -1,5 +1,5 @@
 dependencies {
-    compile project(':CommonConfiguration')
+    compile project(':commonConfiguration')
 
     compile group: 'org.codehaus.groovy.modules.http-builder',
             name: 'http-builder',

@@ -6,3 +6,4 @@
 build
 classes
 .gradle/
+out

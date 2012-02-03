@@ -1,9 +1,8 @@
 package de.codecentric.janus.ci.jenkins
 
-import groovy.text.Template
-import groovy.text.SimpleTemplateEngine
-
 import de.codecentric.janus.conf.Project
+import groovy.text.SimpleTemplateEngine
+import groovy.text.Template
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>

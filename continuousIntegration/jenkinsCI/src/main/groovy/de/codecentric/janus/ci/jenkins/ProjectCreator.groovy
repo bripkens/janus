@@ -3,13 +3,13 @@ package de.codecentric.janus.ci.jenkins
 import de.codecentric.janus.ci.jenkins.conf.ServiceConfiguration
 import de.codecentric.janus.conf.Project
 import groovyx.net.http.HTTPBuilder
-import static groovyx.net.http.Method.POST
+import org.apache.http.HttpRequest
+import org.apache.http.HttpRequestInterceptor
+import org.apache.http.HttpResponse
+import org.apache.http.protocol.HttpContext
 import static groovyx.net.http.ContentType.ANY
 import static groovyx.net.http.ContentType.XML
-import org.apache.http.HttpRequestInterceptor
-import org.apache.http.protocol.HttpContext
-import org.apache.http.HttpRequest
-import org.apache.http.HttpResponse
+import static groovyx.net.http.Method.POST
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
@@ -24,8 +24,6 @@ class ProjectCreator {
     }
 
     boolean create(Project project) {
-        def config = configurationGenerator.generate(project)
-
         def http = new HTTPBuilder(serviceConfiguration.uri)
 
         // HTTP builder needs to be put in preemptive mode since Jenkins
@@ -39,26 +37,19 @@ class ProjectCreator {
             }
         })
 
-
         def successful = false
 
         http.request(POST, ANY) {
             uri.path = '/createItem'
             uri.query = [name: project.name]
             requestContentType = XML
-            body = config
+            body = configurationGenerator.generate(project)
 
-            println config
-            println uri.toString()
-            
             response.success = { HttpResponse resp ->
                 successful = true
-                println resp.getClass().getName()
-                println resp.statusLine
             }
 
             response.failure = { HttpResponse resp ->
-                println resp.getClass().getName()
                 println "Unexpected error: ${resp.statusLine.statusCode} : ${resp.statusLine.reasonPhrase}"
             }
         }
