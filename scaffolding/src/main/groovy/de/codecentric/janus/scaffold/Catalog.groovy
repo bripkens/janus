@@ -14,14 +14,15 @@ class Catalog {
     
     List<Scaffold> scaffolds
 
-    static Catalog fromHomeDirectory() {
+    static Catalog from(File file) {
         ObjectMapper mapper = new ObjectMapper();
-        return new ObjectMapper().readValue(getCatalog(), Catalog.class)
+        new ObjectMapper().readValue(file, Catalog.class)
     }
-    
-    static File getCatalog() {
+
+    static Catalog fromHomeDirectory() {
         String home = System.getProperty('user.home')
         String uri = home + File.separator + CATALOG_FILE
-        new File(uri)
+
+        from(new File(uri))
     }
 }
