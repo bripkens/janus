@@ -1,0 +1,7 @@
+{
+    "scaffolds": [{
+        "name": "Quickstart",
+        "description": "Empty template",
+        "filename": "quickstart.zip"
+    }]
+}
