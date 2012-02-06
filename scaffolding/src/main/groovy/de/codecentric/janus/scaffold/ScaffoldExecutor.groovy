@@ -3,6 +3,8 @@ package de.codecentric.janus.scaffold
 import java.util.zip.ZipFile
 import java.util.zip.ZipEntry
 import org.apache.commons.io.IOUtils
+import groovy.text.SimpleTemplateEngine
+import groovy.text.Template
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
@@ -15,6 +17,7 @@ class ScaffoldExecutor {
     final Scaffold scaffold
     final String pckg
     final File scaffoldFile
+    final SimpleTemplateEngine engine
 
     /**
      * Initialize this scaffold executor using the given parameters. Instances
@@ -42,20 +45,22 @@ class ScaffoldExecutor {
         }
 
         scaffoldFile = scaffoldLoader(scaffold)
+        engine = new SimpleTemplateEngine()
     }
 
-    void apply(File targetDirectory) {
+    void apply(File targetDirectory, Map context) {
         ZipFile file = new ZipFile(scaffoldFile, ZipFile.OPEN_READ)
 
         Enumeration entries = file.entries()
         while(entries.hasMoreElements()) {
-            unzip(file, entries.nextElement(), targetDirectory)
+            unzip(file, entries.nextElement(), targetDirectory, context)
         }
 
         file.close()
     }
 
-    private void unzip(ZipFile file, ZipEntry entry, File targetDirectory) {
+    private void unzip(ZipFile file, ZipEntry entry, File targetDirectory,
+                       Map context) {
         if (!entry.name.startsWith(SOURCE_DIRECTORY)) {
             return
         }
@@ -63,7 +68,7 @@ class ScaffoldExecutor {
         if (entry.directory) {
             unzipDirectory(entry, targetDirectory)
         } else {
-            unzipFile(file, entry, targetDirectory)
+            unzipFile(file, entry, targetDirectory, context)
         }
     }
 
@@ -73,12 +78,13 @@ class ScaffoldExecutor {
 
     private void createDirectory(File dir) {
         if (!dir.exists() && !dir.mkdirs()) {
-            throw new ScaffoldingException("Couldn't create directory ${dir.absolutePath}")
+            throw new ScaffoldingException('Couldn\'t create directory ' +
+                    dir.absolutePath)
         }
     }
 
     private void unzipFile(ZipFile zipFile, ZipEntry entry,
-                           File targetDirectory) {
+                           File targetDirectory, Map context) {
         File outputFile = new File(targetDirectory, updateName(entry.name))
 
         // ensure the parent directory exists
@@ -87,12 +93,15 @@ class ScaffoldExecutor {
             createDirectory(parent)
         }
 
-        // extract file
+        // extract file, apply template rules and write to target
         InputStream input = zipFile.getInputStream(entry)
         OutputStream output = new FileOutputStream(outputFile)
 
         try {
-            IOUtils.copy(input, output)
+            Template template = engine.createTemplate(input.newReader())
+            template.make(context).writeTo(new OutputStreamWriter(output))
+        } catch (MissingPropertyException ex) {
+            throw new ScaffoldingException(ex)
         } finally {
             IOUtils.closeQuietly(input)
             IOUtils.closeQuietly(output)

@@ -18,23 +18,38 @@ class ScaffoldExecutorTest {
     }
 
     @Test void testNoPackage() {
+        def context = [
+                'artifactId': 'Janus',
+                'message': 'Hello World!'
+        ] as HashMap
         ScaffoldExecutor executor = new ScaffoldExecutor(scaffold, "",
                 { testScaffoldLoader(it) })
         File out = getOutputDirectory('noPackage')
-        executor.apply(out)
+        executor.apply(out, context)
         println "Please verify the test results manually by" +
                 " investigating ${out.absolutePath}."
     }
 
     @Test void testWithPackage() {
+        def context = [
+                'artifactId': 'Janus',
+                'message': 'Hello World!'
+        ] as HashMap
         ScaffoldExecutor executor = new ScaffoldExecutor(scaffold,
                 "de.codecentric", { testScaffoldLoader(it) })
         File out = getOutputDirectory('withPackage')
-        executor.apply(out)
+        executor.apply(out, context)
         println "Please verify the test results manually by" +
                 " investigating ${out.absolutePath}."
     }
 
+    @Test(expected=ScaffoldingException.class) void testWrongContext() {
+        ScaffoldExecutor executor = new ScaffoldExecutor(scaffold,
+                "de.codecentric", { testScaffoldLoader(it) })
+        File out = getOutputDirectory('wrongContext')
+        executor.apply(out, [] as HashMap)
+    }
+    
     File testScaffoldLoader(Scaffold scaffold) {
         return new File(this.getClass().getClassLoader()
                 .getResource(scaffold.filename).toURI())
@@ -42,6 +57,7 @@ class ScaffoldExecutorTest {
 
     File getOutputDirectory(String subDirectory) {
         new File(new File('.').getAbsolutePath() + File.separator +
-                'build' + File.separator + subDirectory)
+                'build' + File.separator + 'generated' + File.separator +
+                subDirectory)
     }
 }
