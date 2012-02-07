@@ -85,6 +85,7 @@ class ScaffoldExecutor {
 
     private void unzipFile(ZipFile zipFile, ZipEntry entry,
                            File targetDirectory, Map context) {
+
         File outputFile = new File(targetDirectory, updateName(entry.name))
 
         // ensure the parent directory exists
