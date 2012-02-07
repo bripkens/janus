@@ -5,10 +5,12 @@ import java.util.zip.ZipEntry
 import org.apache.commons.io.IOUtils
 import groovy.text.SimpleTemplateEngine
 import groovy.text.Template
+import groovy.util.logging.Slf4j
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
  */
+@Slf4j
 class ScaffoldExecutor {
     static final PACKAGE_WRAPPER_PLACEHOLDER = '-to_package-'
     static final SOURCE_DIRECTORY = 'sources/'
@@ -51,6 +53,8 @@ class ScaffoldExecutor {
     void apply(File targetDirectory, Map context) {
         ZipFile file = new ZipFile(scaffoldFile, ZipFile.OPEN_READ)
 
+        context['package'] = pckg
+
         Enumeration entries = file.entries()
         while(entries.hasMoreElements()) {
             unzip(file, entries.nextElement(), targetDirectory, context)
@@ -77,6 +81,7 @@ class ScaffoldExecutor {
     }
 
     private void createDirectory(File dir) {
+        log.debug("Extracting directory ${dir.absolutePath}.")
         if (!dir.exists() && !dir.mkdirs()) {
             throw new ScaffoldingException('Couldn\'t create directory ' +
                     dir.absolutePath)
@@ -87,6 +92,7 @@ class ScaffoldExecutor {
                            File targetDirectory, Map context) {
 
         File outputFile = new File(targetDirectory, updateName(entry.name))
+        log.debug("Extracting file ${entry.name} to ${outputFile.absolutePath}.")
 
         // ensure the parent directory exists
         File parent = outputFile.parentFile

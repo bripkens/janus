@@ -1,9 +1,6 @@
-version = '0.1-SNAPSHOT'
-group = 'de.codecentric'
+//slf4jVersion = '1.64'
 
 apply plugin: 'idea'
-
-
 
 subprojects {
     apply plugin: 'groovy'
@@ -14,8 +11,12 @@ subprojects {
     }
 
     dependencies {
-        groovy group: 'org.codehaus.groovy', name: 'groovy', version: '1.7.10'
+        groovy group: 'org.codehaus.groovy', name: 'groovy', version: '1.8.5'
+        compile group: 'org.slf4j', name:'slf4j-api', version: '1.6.4'
 
+        logbackVersion = '1.0.0'
+        testRuntime group: 'ch.qos.logback', name:'logback-classic', version: logbackVersion
+        testRuntime group: 'ch.qos.logback', name:'logback-core', version: logbackVersion
         testCompile group: 'junit', name: 'junit', version: '4.10'
     }
 }
