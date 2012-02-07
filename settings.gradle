@@ -1,6 +1,5 @@
-include 'commonConfiguration',
+include 'common',
         'continuousIntegration',
         'continuousIntegration:commonConfiguration',
         'continuousIntegration:jenkinsCI',
-        'scaffolding',
-        'settings'
+        'generation'

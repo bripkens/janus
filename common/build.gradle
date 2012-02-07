@@ -1,0 +1,13 @@
+dependencies {
+    compile group: 'commons-lang',
+            name: 'commons-lang',
+            version: '2.6'
+
+    compile group: 'commons-io',
+            name: 'commons-io',
+            version: '2.1'
+
+    compile group: 'org.codehaus.jackson',
+            name: 'jackson-mapper-asl',
+            version: '1.9.4'
+}
