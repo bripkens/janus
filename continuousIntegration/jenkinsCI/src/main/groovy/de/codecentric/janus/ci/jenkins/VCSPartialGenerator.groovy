@@ -10,16 +10,13 @@ import de.codecentric.janus.conf.Project
  * @author Ben Ripkens <bripkens.dev@gmail.com>
  */
 class VCSPartialGenerator {
-    final VersionControlSystem vcs
-    final VCSConfig vcsConfig
+    final VCSConfig vcs
     final Project project
 
-    VCSPartialGenerator(VersionControlSystem vcs, VCSConfig vcsConfig,
-                        Project project) {
-        assert vcs != null && vcsConfig != null && project != null
+    VCSPartialGenerator(VCSConfig vcs, Project project) {
+        assert vcs != null && project != null
         
         this.vcs = vcs
-        this.vcsConfig = vcsConfig
         this.project = project
     }
 
@@ -27,17 +24,17 @@ class VCSPartialGenerator {
         SimpleTemplateEngine engine = new SimpleTemplateEngine()
         Template template = engine.createTemplate(templateReader)
         
-        template.make(['vcs': vcsConfig, 'project': project]).toString()
+        template.make(['vcs': this.vcs, 'project': project]).toString()
     }
 
     private Reader getTemplateReader() {
-        String fileName = "/vcs/${vcs.name().toLowerCase()}.xml"
+        String fileName = "/vcs/${vcs.vcs.name().toLowerCase()}.xml"
         InputStream input = this.getClass().getResourceAsStream(fileName)
 
         if (!input) {
-            throw new JenkinsConfigurationException("""A Jenkins \
-            configuration for the given version control system \
-            (${vcs.name()}) does not exist.""".stripIndent())
+            throw new JenkinsConfigurationException('A Jenkins ' +
+                    'configuration for the given version control ' +
+                    "system (${vcs.vcs.name()}) does not exist.")
         }
 
         input.newReader()

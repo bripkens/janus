@@ -14,19 +14,19 @@ class VCSPartialGeneratorTest {
     static final VCS_URL = 'https://code.google.com/p/janus-example-scaffold/'
 
     Project project
-    VersionControlSystem vcs
     VCSConfig config
 
     @Before void setup() {
         project = new Project();
-        vcs = VersionControlSystem.MERCURIAL
         config = null
     }
 
     @Test void withBranch() {
-        config = new MercurialConfig(url: VCS_URL, branch: 'prototype')
+        config = new MercurialConfig(url: VCS_URL,
+                branch: 'prototype',
+                vcs: VersionControlSystem.MERCURIAL)
 
-        String actual = new VCSPartialGenerator(vcs, config, project)
+        String actual = new VCSPartialGenerator(config, project)
                 .generatePartial()
 
         String exp = """\
@@ -45,9 +45,10 @@ class VCSPartialGeneratorTest {
     }
 
     @Test void noBranch() {
-        config = new MercurialConfig(url: VCS_URL)
+        config = new MercurialConfig(url: VCS_URL,
+                vcs: VersionControlSystem.MERCURIAL)
 
-        String actual = new VCSPartialGenerator(vcs, config, project)
+        String actual = new VCSPartialGenerator(config, project)
                 .generatePartial()
 
         String exp = """\
