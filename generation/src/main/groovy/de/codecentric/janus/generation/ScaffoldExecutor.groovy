@@ -32,6 +32,7 @@ class ScaffoldExecutor {
         this.scaffold = scaffold
         this.project = project
         this.context = context
+        this.context['project'] = project
 
         pckg = project.pckg.replace('.', '/')
         engine = new SimpleTemplateEngine()
@@ -110,6 +111,6 @@ class ScaffoldExecutor {
      */
     private String updateName(String originalName) {
         return originalName.replace(PACKAGE_WRAPPER_PLACEHOLDER, pckg)
-                .replace(SOURCE_DIRECTORY, '')
+                .replaceFirst(SOURCE_DIRECTORY, '')
     }
 }

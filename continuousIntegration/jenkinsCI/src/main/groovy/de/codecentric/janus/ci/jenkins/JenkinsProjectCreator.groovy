@@ -94,9 +94,12 @@ class JenkinsProjectCreator {
             }
         })
 
+        def name = project.name
+        log.info "Creating new Jenkis job ${name}."
+        log.debug "Configuration for Jenkins job ${name} is ${jobConfig}"
         http.request(POST, ANY) {
             uri.path = '/createItem'
-            uri.query = [name: project.name]
+            uri.query = [name: name]
             requestContentType = XML
             body = jobConfig
 

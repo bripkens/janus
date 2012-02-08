@@ -60,4 +60,16 @@ class ScaffoldExecutorTest {
         println "Please verify the test results manually by" +
                 " investigating ${out.absolutePath}."
     }
+    
+    @Test void testOther() {
+        File zip = new File(this.getClass().getClassLoader()
+                .getResource('complex-scaffold.zip').toURI())
+        scaffold = Scaffold.from(zip)
+
+        File out = getOutputDirectory('complex-scaffold')
+        new ScaffoldExecutor(scaffold, createProject('de.codecentric'),
+                [] as HashMap).apply(out)
+        println "Please verify the test results manually by" +
+                " investigating ${out.absolutePath}."
+    }
 }
