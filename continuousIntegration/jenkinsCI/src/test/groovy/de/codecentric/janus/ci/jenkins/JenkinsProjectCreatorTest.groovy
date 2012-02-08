@@ -28,7 +28,6 @@ class JenkinsProjectCreatorTest {
                 apiToken: '1f75782b174cec612e1c28dc8f8cbf82',
                 uri: 'http://localhost:8080'])
         vcsConfig = new MercurialConfig(url: VCS_URL,
-                branch: 'prototype',
                 vcs: VersionControlSystem.MERCURIAL)
         File zip = new File(this.getClass().getClassLoader()
                 .getResource('quickstart.zip').toURI())
@@ -36,7 +35,7 @@ class JenkinsProjectCreatorTest {
     }
     
     @Test void createJob() {
-        new JenkinsProjectCreator(config, project, scaffold, vcsConfig).applyScaffold()
-        //assert new JenkinsProjectCreator(config).apply(project)
+        new JenkinsProjectCreator(config, project, scaffold, vcsConfig)
+                .applyScaffold()
     }
 }

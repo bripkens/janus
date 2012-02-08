@@ -53,9 +53,6 @@ class JenkinsProjectCreator {
             zip.close()
         } catch (IOException ex) {
         }
-        
-        // TODO run over every template and run it through the template
-        //       engine and sent the result to the server
     }
 
     private NavigableMap<String, ZipEntry> getSortedEntries(ZipFile zip) {
@@ -76,10 +73,9 @@ class JenkinsProjectCreator {
     private void applyJob(ZipFile zip, ZipEntry entry, Map context) {
         def reader = zip.getInputStream(entry).newReader()
 
-        def engine = new SimpleTemplateEngine()
-        def template = engine.createTemplate(reader)
+        def template = new SimpleTemplateEngine().createTemplate(reader)
 
-        println template.make(context)
+        createJob(template.make(context).toString())
 
         IOUtils.closeQuietly(reader)
     }
