@@ -1,6 +1,5 @@
 package de.codecentric.janus.ci.jenkins
 
-import de.codecentric.janus.ci.jenkins.conf.ServiceConfiguration
 import de.codecentric.janus.conf.Project
 import groovyx.net.http.HTTPBuilder
 import org.apache.http.HttpRequest
@@ -10,27 +9,34 @@ import org.apache.http.protocol.HttpContext
 import static groovyx.net.http.ContentType.ANY
 import static groovyx.net.http.ContentType.XML
 import static groovyx.net.http.Method.POST
+import de.codecentric.janus.scaffold.Scaffold
+import groovy.util.logging.Slf4j
+import de.codecentric.janus.ci.jenkins.conf.ServiceConfig
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
  */
-class ProjectCreator {
-    private final ServiceConfiguration serviceConfiguration
-    private final ProjectConfigurationGenerator configurationGenerator
+@Slf4j
+class JenkinsProjectCreator {
+    final ServiceConfig serviceConfig
+    final Project project
+    final Scaffold scaffold
 
-    ProjectCreator(ServiceConfiguration serviceConfiguration) {
-        this.serviceConfiguration = serviceConfiguration
-        configurationGenerator = new ProjectConfigurationGenerator()
+    JenkinsProjectCreator(ServiceConfig serviceConfiguration,
+                          Project project, Scaffold scaffold) {
+        this.serviceConfig = serviceConfiguration
+        this.project = project
+        this.scaffold = scaffold
     }
 
-    boolean create(Project project) {
-        def http = new HTTPBuilder(serviceConfiguration.uri)
+    boolean apply() {
+        HTTPBuilder http = new HTTPBuilder(serviceConfig.uri)
 
         // HTTP builder needs to be put in preemptive mode since Jenkins
         // directly responds with 403 instead of 401.
         // Therefore http.auth.basic(name, apiToken) isn't used
-        def encodedCredentials = (serviceConfiguration.username + ':' +
-                serviceConfiguration.apiToken).bytes.encodeBase64().toString()
+        String encodedCredentials = (serviceConfig.username +
+                ':' + serviceConfig.apiToken).bytes.encodeBase64().toString()
         http.client.addRequestInterceptor(new HttpRequestInterceptor() {
             void process(HttpRequest httpRequest, HttpContext httpContext) {
                 httpRequest.addHeader('Authorization', "Basic ${encodedCredentials}")
@@ -43,17 +49,22 @@ class ProjectCreator {
             uri.path = '/createItem'
             uri.query = [name: project.name]
             requestContentType = XML
-            body = configurationGenerator.generate(project)
+            body = requestBody
 
             response.success = { HttpResponse resp ->
                 successful = true
             }
 
             response.failure = { HttpResponse resp ->
-                println "Unexpected error: ${resp.statusLine.statusCode} : ${resp.statusLine.reasonPhrase}"
+                throw new JenkinsConfigurationException(
+                        "Unexpected error: ${resp.statusLine.statusCode}: " +
+                                resp.statusLine.reasonPhrase)
             }
         }
 
         successful
+    }
+    
+    private String getRequestBody() {
     }
 }
