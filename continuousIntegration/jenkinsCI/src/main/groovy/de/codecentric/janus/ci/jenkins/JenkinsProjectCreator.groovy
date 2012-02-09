@@ -23,6 +23,7 @@ import org.apache.commons.io.IOUtils
  */
 @Slf4j
 class JenkinsProjectCreator {
+    static final JOB_FILE_REGEX = /^jobs\/jenkins\/job(-([a-z0-9-_]+))?\.xml$/
     final ServiceConfig serviceConfig
     final Project project
     final Scaffold scaffold
@@ -45,8 +46,9 @@ class JenkinsProjectCreator {
         def zip = new ZipFile(scaffold.file, ZipFile.OPEN_READ)
 
         def context = ['vcsConfig': vcsPartial, 'project': project]
-        getSortedEntries(zip).every { k, v ->
-            applyJob(zip, v, context)
+        def sortedEntries = getSortedEntries(zip)
+        sortedEntries.each { k, v ->
+            applyJob(zip, k, v, context)
         }
 
         try {
@@ -56,31 +58,61 @@ class JenkinsProjectCreator {
     }
 
     private NavigableMap<String, ZipEntry> getSortedEntries(ZipFile zip) {
-        def sortedEntries = new TreeMap<String, ZipEntry>()
+        def sortedEntries = [] as TreeMap<String, ZipEntry>
 
         def entries = zip.entries()
         while(entries.hasMoreElements()) {
             def entry = entries.nextElement()
 
             if (!entry.directory && entry.name.startsWith('jobs/jenkins/')) {
-                sortedEntries[entry.name] = entry
+                def jobName = generateJobName(entry.name)
+                sortedEntries[jobName] = entry
             }
         }
 
         sortedEntries
     }
 
-    private void applyJob(ZipFile zip, ZipEntry entry, Map context) {
+    /**
+     * Generate an appropriate job name as it can be send to Jenkins
+     *
+     * Example 1:
+     * In: jobs/jenkins/job-main.xml
+     * Out: ${project.name}-main
+     *
+     * Example 2:
+     * In: jobs/jenkins/job-main.xml
+     * Out: ${project.name}
+     *
+     * @param filePath The path of the ZIP file entry
+     * @return The job name with prefixed project name
+     */
+    private String generateJobName(String filePath) {
+        def matcher = filePath =~ JOB_FILE_REGEX
+
+        if (!matcher.matches()) {
+            throw new JenkinsConfigurationException('The Jenkins job ' +
+                    "definition file ${filePath} does not use a valid" +
+                    ' format.')
+        }
+
+        def customName = matcher[0][2]
+        if (customName == null) {
+            project.name
+        } else {
+            project.name + '-' + customName
+        }
+    }
+
+    private void applyJob(ZipFile zip, String jobName, ZipEntry entry,
+                           Map context) {
         def reader = zip.getInputStream(entry).newReader()
-
         def template = new SimpleTemplateEngine().createTemplate(reader)
-
-        createJob(template.make(context).toString())
-
+        createJob(jobName, template.make(context).toString())
         IOUtils.closeQuietly(reader)
     }
 
-    private void createJob(String jobConfig) {
+    private void createJob(String jobName, String jobConfig) {
         HTTPBuilder http = new HTTPBuilder(serviceConfig.uri)
 
         // HTTP builder needs to be put in preemptive mode since Jenkins
@@ -94,12 +126,11 @@ class JenkinsProjectCreator {
             }
         })
 
-        def name = project.name
-        log.info "Creating new Jenkis job ${name}."
-        log.debug "Configuration for Jenkins job ${name} is ${jobConfig}"
+        log.info "Creating new Jenkis job ${jobName}."
+        log.debug "Configuration for Jenkins job '${jobName}' is ${jobConfig}"
         http.request(POST, ANY) {
             uri.path = '/createItem'
-            uri.query = [name: name]
+            uri.query = [name: jobName]
             requestContentType = XML
             body = jobConfig
 
