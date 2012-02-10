@@ -1,4 +1,4 @@
-# Janus - bootstrap development environments
+# Janus - bootstrap development environments [![Build Status](https://secure.travis-ci.org/bripkens/janus.png)](https://secure.travis-ci.org/#!/bripkens/janus)
 
 If you have to bootstrap software development environments on a regular basis,
 Janus might be of interest to you. What it does is, it extends Apache Maven's
