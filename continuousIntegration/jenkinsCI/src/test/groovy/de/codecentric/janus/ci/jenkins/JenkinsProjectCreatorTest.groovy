@@ -13,6 +13,7 @@ import de.codecentric.janus.scaffold.Scaffold
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
  */
+@Ignore
 class JenkinsProjectCreatorTest {
     static final VCS_URL = 'https://code.google.com/p/janus-example-scaffold/'
 
