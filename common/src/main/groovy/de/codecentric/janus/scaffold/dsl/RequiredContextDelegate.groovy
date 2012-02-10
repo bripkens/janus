@@ -10,16 +10,13 @@ class RequiredContextDelegate {
 
     RequiredContextDelegate(Scaffold scaffold) {
         this.scaffold = scaffold
-        
-        if (scaffold.requiredContext == null) {
-            scaffold.requiredContext = [] as HashMap
-        }
     }
 
     def methodMissing(String name, args) {
         // a map entry always has a single value
         if (args.size() != 1) {
-            throw new MissingMethodException(name, delegate, args)
+            throw new MissingMethodException(name,
+                    RequiredContextDelegate.class, args)
         }
         scaffold.requiredContext[name] = args[0]
     }

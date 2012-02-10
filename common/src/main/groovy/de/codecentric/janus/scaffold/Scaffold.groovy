@@ -11,7 +11,8 @@ class Scaffold {
     static final DESCRIPTOR_FILE_NAME = 'scaffold.json'
     
     String name, description
-    Map<String, String> requiredContext
+    Map<String, String> requiredContext = [] as HashMap
+    List<BuildJob> buildJobs = []
     File file
 
     static Scaffold from(File file) {

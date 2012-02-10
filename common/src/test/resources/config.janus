@@ -6,4 +6,23 @@ scaffold {
         groupId 'Please see Maven groupId'
         artifactId 'Plase see Maven artifactId'
     }
+
+    buildJob {
+        name 'entities'
+        concurrentBuild false
+
+        tasks {
+            maven targets: 'clean package', pom: 'entities/pom.xml'
+        }
+    }
+
+    buildJob {
+        name 'parent'
+        concurrentBuild true
+
+        tasks {
+            maven targets: 'clean install'
+            maven targets: 'clean'
+        }
+    }
 }
