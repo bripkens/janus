@@ -1,0 +1,9 @@
+scaffold {
+    name 'RESTful Web application'
+    description 'Web based project with RESTeasy based web service'
+
+    requiredContext {
+        groupId 'Please see Maven groupId'
+        artifactId 'Plase see Maven artifactId'
+    }
+}
