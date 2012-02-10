@@ -15,7 +15,9 @@ class ScaffoldConfigParser {
     }
 
     def parser() {
-        Script configScript = new GroovyShell().parse(configFile.text)
+        def codeSource = new GroovyCodeSource(configFile.text,
+                'RestrictedScript', '/restrictedScript')
+        Script configScript = new GroovyShell().parse(codeSource)
 
         Scaffold scaffold = new Scaffold()
 

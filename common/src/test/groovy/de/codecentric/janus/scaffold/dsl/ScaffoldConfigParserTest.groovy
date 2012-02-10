@@ -4,6 +4,7 @@ import org.junit.Before
 import org.junit.Test
 import de.codecentric.janus.scaffold.Scaffold
 import de.codecentric.janus.scaffold.BuildJobTask
+import de.codecentric.janus.Application
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
@@ -12,6 +13,7 @@ class ScaffoldConfigParserTest {
     File config
 
     @Before void setup() {
+        Application.bootstrap()
         config = new File(this.getClass().getClassLoader()
                 .getResource('config.janus').toURI())
     }
