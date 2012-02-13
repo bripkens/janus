@@ -1,3 +1,18 @@
+sourceSets {
+    integrationTest {
+        compileClasspath = sourceSets.main.output + configurations.testRuntime
+        runtimeClasspath = output + sourceSets.main.output + configurations.testRuntime
+        groovy {
+            srcDir 'src/integrationTest/groovy'
+        }
+    }
+}
+
+task integrationTest(type: Test) {
+    testClassesDir = sourceSets.integrationTest.output.classesDir
+    classpath = sourceSets.integrationTest.runtimeClasspath
+}
+
 dependencies {
     compile project(':common')
 

@@ -38,14 +38,14 @@ class JenkinsConfigGenerator {
                 vcsConfig: vcsPartial, tasks: taskPartial, '/base.xml')
     }
     
-    String generateTaskPartial(BuildJobTask task) {
+    private String generateTaskPartial(BuildJobTask task) {
         assert task.valid
 
         def path = "/task/${task.type.name().toLowerCase()}.xml"
         return runThoughEngine([job: task], path)
     }
-    
-    String runThoughEngine(Map context, String path) {
+
+    private String runThoughEngine(Map context, String path) {
         def input = this.getClass().getResourceAsStream(path)
 
         if (!input) {

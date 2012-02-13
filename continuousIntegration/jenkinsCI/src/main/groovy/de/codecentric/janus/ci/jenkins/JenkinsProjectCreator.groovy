@@ -17,6 +17,7 @@ import java.util.zip.ZipFile
 import java.util.zip.ZipEntry
 import groovy.text.SimpleTemplateEngine
 import org.apache.commons.io.IOUtils
+import de.codecentric.janus.scaffold.BuildJob
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
@@ -26,90 +27,26 @@ class JenkinsProjectCreator {
     static final JOB_FILE_REGEX = /^jobs\/jenkins\/job(-([a-z0-9-_]+))?\.xml$/
     final ServiceConfig serviceConfig
     final Project project
-    final Scaffold scaffold
     final VCSConfig vcs
+    final Scaffold scaffold
+    final Map context
 
-    JenkinsProjectCreator(ServiceConfig serviceConfiguration,
-                          Project project,
-                          Scaffold scaffold,
-                          VCSConfig vcs) {
-        this.serviceConfig = serviceConfiguration
+    JenkinsProjectCreator(ServiceConfig serviceConfig, Project project,
+                          VCSConfig vcs, Scaffold scaffold, Map context) {
+        this.serviceConfig = serviceConfig
         this.project = project
-        this.scaffold = scaffold
         this.vcs = vcs
+        this.scaffold = scaffold
+        this.context = context
     }
 
-    void applyScaffold() {
-        def vcsPartial = new VCSPartialGenerator(vcs, project)
-                .generatePartial()
-
-        def zip = new ZipFile(scaffold.file, ZipFile.OPEN_READ)
-
-        def context = ['vcsConfig': vcsPartial, 'project': project]
-        def sortedEntries = getSortedEntries(zip)
-        sortedEntries.each { k, v ->
-            applyJob(zip, k, v, context)
+    void create() {
+        scaffold.buildJobs.each {BuildJob job ->
+            def name = "${project.name}-${job.name}"
+            def config = new JenkinsConfigGenerator(project, job, context, vcs)
+                    .generate()
+            createJob(name, config)
         }
-
-        try {
-            zip.close()
-        } catch (IOException ex) {
-        }
-    }
-
-    private NavigableMap<String, ZipEntry> getSortedEntries(ZipFile zip) {
-        def sortedEntries = [] as TreeMap<String, ZipEntry>
-
-        def entries = zip.entries()
-        while(entries.hasMoreElements()) {
-            def entry = entries.nextElement()
-
-            if (!entry.directory && entry.name.startsWith('jobs/jenkins/')) {
-                def jobName = generateJobName(entry.name)
-                sortedEntries[jobName] = entry
-            }
-        }
-
-        sortedEntries
-    }
-
-    /**
-     * Generate an appropriate job name as it can be send to Jenkins
-     *
-     * Example 1:
-     * In: jobs/jenkins/job-main.xml
-     * Out: ${project.name}-main
-     *
-     * Example 2:
-     * In: jobs/jenkins/job-main.xml
-     * Out: ${project.name}
-     *
-     * @param filePath The path of the ZIP file entry
-     * @return The job name with prefixed project name
-     */
-    private String generateJobName(String filePath) {
-        def matcher = filePath =~ JOB_FILE_REGEX
-
-        if (!matcher.matches()) {
-            throw new JenkinsConfigurationException('The Jenkins job ' +
-                    "definition file ${filePath} does not use a isValid" +
-                    ' format.')
-        }
-
-        def customName = matcher[0][2]
-        if (customName == null) {
-            project.name
-        } else {
-            project.name + '-' + customName
-        }
-    }
-
-    private void applyJob(ZipFile zip, String jobName, ZipEntry entry,
-                           Map context) {
-        def reader = zip.getInputStream(entry).newReader()
-        def template = new SimpleTemplateEngine().createTemplate(reader)
-        createJob(jobName, template.make(context).toString())
-        IOUtils.closeQuietly(reader)
     }
 
     private void createJob(String jobName, String jobConfig) {
