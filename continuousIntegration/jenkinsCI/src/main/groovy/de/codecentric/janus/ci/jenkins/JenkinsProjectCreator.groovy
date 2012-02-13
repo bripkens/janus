@@ -92,7 +92,7 @@ class JenkinsProjectCreator {
 
         if (!matcher.matches()) {
             throw new JenkinsConfigurationException('The Jenkins job ' +
-                    "definition file ${filePath} does not use a valid" +
+                    "definition file ${filePath} does not use a isValid" +
                     ' format.')
         }
 

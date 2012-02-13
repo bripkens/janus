@@ -9,7 +9,6 @@ scaffold {
 
     buildJob {
         name 'entities'
-        concurrentBuild false
 
         tasks {
             maven targets: 'clean package', pom: 'entities/pom.xml'
