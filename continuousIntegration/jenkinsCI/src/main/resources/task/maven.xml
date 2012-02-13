@@ -1,0 +1,6 @@
+        <hudson.tasks.Maven>
+            <targets>${job['targets']}</targets>
+            <mavenName>(Default)</mavenName>
+            <pom>${job['pom']}</pom>
+            <usePrivateRepository>false</usePrivateRepository>
+        </hudson.tasks.Maven>

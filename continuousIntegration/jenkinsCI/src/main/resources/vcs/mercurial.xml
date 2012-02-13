@@ -1,10 +1,10 @@
-<scm class="hudson.plugins.mercurial.MercurialSCM">
-    <installation>(Default)</installation>
-    <source>${vcs.url}</source>
-    <modules></modules>
-<% if (vcs.branch) { %>    <branch>${vcs.branch}</branch><% } %>
-    <clean>false</clean>
-    <browser class="hudson.plugins.mercurial.browser.HgWeb">
-        <url>${vcs.url}</url>
-    </browser>
-</scm>
+    <scm class="hudson.plugins.mercurial.MercurialSCM">
+        <installation>(Default)</installation>
+        <source>${vcs.url}</source>
+        <modules></modules>
+<% if (vcs.branch) { %>        <branch>${vcs.branch}</branch><% } %>
+        <clean>false</clean>
+        <browser class="hudson.plugins.mercurial.browser.HgWeb">
+            <url>${vcs.url}</url>
+        </browser>
+    </scm>

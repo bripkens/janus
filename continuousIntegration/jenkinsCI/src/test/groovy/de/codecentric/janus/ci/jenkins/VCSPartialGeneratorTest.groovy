@@ -30,16 +30,16 @@ class VCSPartialGeneratorTest {
                 .generatePartial()
 
         String exp = """\
-<scm class="hudson.plugins.mercurial.MercurialSCM">
-    <installation>(Default)</installation>
-    <source>https://code.google.com/p/janus-example-scaffold/</source>
-    <modules></modules>
-    <branch>prototype</branch>
-    <clean>false</clean>
-    <browser class="hudson.plugins.mercurial.browser.HgWeb">
-        <url>https://code.google.com/p/janus-example-scaffold/</url>
-    </browser>
-</scm>"""
+    <scm class="hudson.plugins.mercurial.MercurialSCM">
+        <installation>(Default)</installation>
+        <source>https://code.google.com/p/janus-example-scaffold/</source>
+        <modules></modules>
+        <branch>prototype</branch>
+        <clean>false</clean>
+        <browser class="hudson.plugins.mercurial.browser.HgWeb">
+            <url>https://code.google.com/p/janus-example-scaffold/</url>
+        </browser>
+    </scm>"""
 
         assert actual == exp
     }
@@ -52,16 +52,16 @@ class VCSPartialGeneratorTest {
                 .generatePartial()
 
         String exp = """\
-<scm class="hudson.plugins.mercurial.MercurialSCM">
-    <installation>(Default)</installation>
-    <source>https://code.google.com/p/janus-example-scaffold/</source>
-    <modules></modules>
+    <scm class="hudson.plugins.mercurial.MercurialSCM">
+        <installation>(Default)</installation>
+        <source>https://code.google.com/p/janus-example-scaffold/</source>
+        <modules></modules>
 
-    <clean>false</clean>
-    <browser class="hudson.plugins.mercurial.browser.HgWeb">
-        <url>https://code.google.com/p/janus-example-scaffold/</url>
-    </browser>
-</scm>"""
+        <clean>false</clean>
+        <browser class="hudson.plugins.mercurial.browser.HgWeb">
+            <url>https://code.google.com/p/janus-example-scaffold/</url>
+        </browser>
+    </scm>"""
 
         assert actual == exp
     }
