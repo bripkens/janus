@@ -19,7 +19,7 @@ class ScaffoldConfigParserTest {
     }
 
     @Test void testParse() {
-        Scaffold scaffold = new ScaffoldConfigParser(config).parser()
+        Scaffold scaffold = ScaffoldConfigParser.parse(config)
 
         assert scaffold.name == 'RESTful Web application'
         assert scaffold.description == 'Web based project with RESTeasy based web service'

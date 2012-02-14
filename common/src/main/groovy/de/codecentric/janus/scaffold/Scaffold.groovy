@@ -3,12 +3,13 @@ package de.codecentric.janus.scaffold
 import java.util.zip.ZipFile
 import java.util.zip.ZipEntry
 import org.codehaus.jackson.map.ObjectMapper
+import de.codecentric.janus.scaffold.dsl.ScaffoldConfigParser
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
  */
 class Scaffold {
-    static final DESCRIPTOR_FILE_NAME = 'scaffold.json'
+    static final DESCRIPTOR_FILE_NAME = 'scaffold.groovy'
     
     String name, description
     Map<String, String> requiredContext = [] as HashMap
@@ -28,9 +29,8 @@ class Scaffold {
         }
 
         try {
-            InputStream input = zip.getInputStream(descriptor)
-            ObjectMapper mapper = new ObjectMapper();
-            Scaffold s = new ObjectMapper().readValue(input, Scaffold.class)
+            String config = zip.getInputStream(descriptor).text
+            Scaffold s = ScaffoldConfigParser.parse(config)
             s.file = file
             return s
         } finally {

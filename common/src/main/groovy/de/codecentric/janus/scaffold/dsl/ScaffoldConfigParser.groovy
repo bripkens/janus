@@ -8,14 +8,9 @@ import de.codecentric.janus.scaffold.Scaffold
  */
 @Slf4j
 class ScaffoldConfigParser {
-    final File configFile
 
-    ScaffoldConfigParser(File configFile) {
-        this.configFile = configFile
-    }
-
-    def parser() {
-        def codeSource = new GroovyCodeSource(configFile.text,
+    static Scaffold parse(String configFile) {
+        def codeSource = new GroovyCodeSource(configFile,
                 'RestrictedScript', '/restrictedScript')
         Script configScript = new GroovyShell().parse(codeSource)
 
@@ -34,7 +29,11 @@ class ScaffoldConfigParser {
         scaffold
     }
 
-    ExpandoMetaClass create(Class clazz, Closure closure) {
+    static Scaffold parse(File configFile) {
+        parse(configFile.text)
+    }
+
+    private static ExpandoMetaClass create(Class clazz, Closure closure) {
         ExpandoMetaClass emc = new ExpandoMetaClass(clazz, false)
         // allow customization of EMC
         closure(emc)
