@@ -1,8 +1,16 @@
-apply plugin: 'idea'
+
+
+allprojects {
+    apply plugin: 'idea'
+    
+    group = 'de.codecentric.janus'
+    version = '0.1-SNAPSHOT'
+}
+
 
 subprojects {
     apply plugin: 'groovy'
-    apply plugin: 'idea'
+    apply plugin: 'maven'
 
     repositories {
         mavenCentral()
@@ -27,4 +35,21 @@ subprojects {
                 name: 'junit',
                 version: '4.10'
     }
+    
+    configure(install.repositories.mavenInstaller) {
+        pom.project {
+            inceptionYear '2012'
+            packaging 'jar'
+            licenses {
+                license {
+                    name 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
+        }
+    }
 }
+
+
+
