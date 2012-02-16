@@ -23,4 +23,5 @@ class CatalogEntry {
     String name
     String description
     String filename
+    Map<String, String> requiredContext = [] as HashMap
 }
