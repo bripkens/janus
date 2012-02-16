@@ -16,10 +16,12 @@
 
 package de.codecentric.janus.ci.jenkins
 
+import de.codecentric.janus.JanusException
+
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
  */
-class JenkinsConfigurationException extends RuntimeException {
+class JenkinsConfigurationException extends JanusException {
     JenkinsConfigurationException() {
     }
 

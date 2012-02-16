@@ -20,6 +20,8 @@ import java.util.zip.ZipFile
 import java.util.zip.ZipEntry
 import org.codehaus.jackson.map.ObjectMapper
 import de.codecentric.janus.scaffold.dsl.ScaffoldConfigParser
+import java.util.zip.ZipException
+import de.codecentric.janus.JanusException
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
@@ -33,6 +35,16 @@ class Scaffold {
     File file
 
     static Scaffold from(File file) {
+        try {
+            return fromWrapped(file)
+        } catch (ZipException ex) {
+            throw new JanusException(ex);
+        } catch (IOException ex) {
+            throw new JanusException(ex);
+        }
+    }
+
+    private static Scaffold fromWrapped(File file) {
         assert file != null
 
         ZipFile zip = new ZipFile(file, ZipFile.OPEN_READ)

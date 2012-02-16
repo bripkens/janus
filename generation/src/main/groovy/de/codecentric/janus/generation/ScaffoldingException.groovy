@@ -16,10 +16,12 @@
 
 package de.codecentric.janus.generation
 
+import de.codecentric.janus.JanusException
+
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
  */
-class ScaffoldingException extends RuntimeException {
+class ScaffoldingException extends JanusException {
     ScaffoldingException(Throwable cause) {
         super(cause)
     }
