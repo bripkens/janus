@@ -38,9 +38,9 @@ class Scaffold {
         try {
             return fromWrapped(file)
         } catch (ZipException ex) {
-            throw new JanusException(ex);
+            throw new ScaffoldLoadingException(ex);
         } catch (IOException ex) {
-            throw new JanusException(ex);
+            throw new ScaffoldLoadingException(ex);
         }
     }
 

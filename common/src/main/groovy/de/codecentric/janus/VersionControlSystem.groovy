@@ -16,9 +16,24 @@
 
 package de.codecentric.janus
 
+import de.codecentric.janus.conf.vcs.MercurialConfig
+import de.codecentric.janus.conf.vcs.VCSConfig
+
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
  */
 enum VersionControlSystem {
-    MERCURIAL
+    MERCURIAL(MercurialConfig.class)
+
+    private final Class<? extends VCSConfig> clazz;
+
+    private VersionControlSystem(Class<? extends VCSConfig> clazz) {
+        this.clazz = clazz
+    }
+
+    public <T extends VCSConfig> T newConfig() {
+        T config = clazz.newInstance()
+        config.vcs = this
+        return config
+    }
 }
