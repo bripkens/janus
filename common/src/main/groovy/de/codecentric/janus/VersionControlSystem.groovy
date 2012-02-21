@@ -23,17 +23,41 @@ import de.codecentric.janus.conf.vcs.VCSConfig
  * @author Ben Ripkens <bripkens.dev@gmail.com>
  */
 enum VersionControlSystem {
-    MERCURIAL(MercurialConfig.class)
+    MERCURIAL(MercurialConfig.class,
+            'hg clone $URL',
+            'hg add *',
+            'hg commit -m "Init repository" && hg push')
 
-    private final Class<? extends VCSConfig> clazz;
+    private final Class<? extends VCSConfig> clazz
+    private final String checkoutCommand, addCommand, commitCommand
 
-    private VersionControlSystem(Class<? extends VCSConfig> clazz) {
+    VersionControlSystem(Class<? extends VCSConfig> clazz,
+                         String checkoutCommand,
+                         String addCommand,
+                         String commitCommand) {
         this.clazz = clazz
+        this.checkoutCommand = checkoutCommand
+        this.addCommand = addCommand
+        this.commitCommand = commitCommand
     }
 
-    public <T extends VCSConfig> T newConfig() {
+
+    def <T extends VCSConfig> T newConfig() {
         T config = clazz.newInstance()
         config.vcs = this
         return config
     }
+
+    String getCheckoutCommand() {
+        return checkoutCommand
+    }
+
+    String getAddCommand() {
+        return addCommand
+    }
+
+    String getCommitCommand() {
+        return commitCommand
+    }
+
 }
