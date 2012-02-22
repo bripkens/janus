@@ -1,6 +1,6 @@
 rootProject.name = 'janus'
 include 'common',
         'continuousIntegration',
-        'continuousIntegration:commonConfiguration',
+        'continuousIntegration:common',
         'continuousIntegration:jenkinsCI',
         'generation'
