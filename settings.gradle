@@ -2,5 +2,5 @@ rootProject.name = 'janus'
 include 'common',
         'continuousIntegration',
         'continuousIntegration:commonCI',
-        'continuousIntegration:jenkinsCI',
+        'continuousIntegration:jenkins',
         'generation'
