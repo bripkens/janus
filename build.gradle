@@ -1,6 +1,7 @@
 
 
 allprojects {
+    apply plugin: 'eclipse'
     apply plugin: 'idea'
     
     group = 'de.codecentric.janus'

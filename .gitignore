@@ -7,3 +7,6 @@ build
 classes
 .gradle/
 out
+.project
+.classpath
+.settings/
