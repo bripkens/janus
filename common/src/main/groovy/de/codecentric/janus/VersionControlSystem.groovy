@@ -39,6 +39,7 @@ enum VersionControlSystem {
         this.checkoutCommand = checkoutCommand
         this.addCommand = addCommand
         this.commitCommand = commitCommand
+		
     }
 
 

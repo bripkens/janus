@@ -7,6 +7,10 @@ dependencies {
             name: 'commons-io',
             version: '2.1'
 
+    compile group: 'commons-validator',
+            name: 'commons-validator',
+            version: '1.4.0'
+
     compile group: 'org.codehaus.jackson',
             name: 'jackson-mapper-asl',
             version: '1.9.4'

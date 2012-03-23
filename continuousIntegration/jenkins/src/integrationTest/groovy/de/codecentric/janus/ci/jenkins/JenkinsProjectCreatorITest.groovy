@@ -30,7 +30,7 @@ import de.codecentric.janus.scaffold.BuildJobTask
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
  */
-class JenkinsProjectCreatorTest {
+class JenkinsProjectCreatorITest {
     static final VCS_URL = 'https://code.google.com/p/janus-example-scaffold/'
 
     Project project
