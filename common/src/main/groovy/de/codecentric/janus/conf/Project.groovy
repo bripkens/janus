@@ -22,4 +22,15 @@ class Project {
         // placeholder for later
         true
     }
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", pckg='" + pckg + '\'' +
+                '}';
+    }
+
+
 }

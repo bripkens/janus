@@ -24,4 +24,14 @@ class CatalogEntry {
     String description
     String filename
     Map<String, String> requiredContext = [] as HashMap
+
+    @Override
+    public String toString() {
+        return "CatalogEntry{" +
+                "name='" + name + '\'' +
+                ", filename='" + filename + '\'' +
+                '}';
+    }
+
+
 }

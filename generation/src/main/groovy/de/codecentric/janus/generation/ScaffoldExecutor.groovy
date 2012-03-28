@@ -47,7 +47,8 @@ class ScaffoldExecutor {
 
         this.scaffold = scaffold
         this.project = project
-        this.context = context
+        this.context = [] as HashMap<String, Object>
+        this.context.putAll(context)
         this.context['project'] = project
 
         pckg = project.pckg.replace('.', '/')
