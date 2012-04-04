@@ -11,3 +11,28 @@ project templates (so called scaffolds).
  - creation of version control system repositories
  - auto-generated Jenkins build jobs
  - JIRA project creation
+
+A Janus user interface is available through a [Jenkins plug-in](https://github.com/bripkens/janus-plugin).
+
+# Version History
+
+## 0.3
+
+ - addition of static types to enable library usage from statically typed
+   languages.
+ - fixed a bug in the ScaffoldExecutor which was responsible for overwriting
+   context parameters.
+
+## 0.2
+
+ - exposing additional functionality through the API for user interfaces.
+
+## 0.1
+
+ - initial project structure.
+ - reading and parsing scaffolds and scaffold catalogs (UC-5, UC-9).
+ - simple DSL for continuous integration system config files (UC-10).
+
+# LICENSE
+
+Copyright (C) 2012 codecentric AG, Licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).
