@@ -21,8 +21,12 @@ buildJob {
                 buildFile: 'build-ci.xml',
                 jvmOptions: '-ea',
                 properties: 'something went wrong.'
+
         fail
     }
+
+    trigger 'parent', 'deployment' on success
+    trigger 'cleanup' on failure
 }
 
 buildJob {

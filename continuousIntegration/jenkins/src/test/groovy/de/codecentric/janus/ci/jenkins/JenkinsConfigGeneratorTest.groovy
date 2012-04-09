@@ -98,7 +98,9 @@ class JenkinsConfigGeneratorTest {
         </hudson.tasks.Maven>
     </builders>
 
-    <publishers/>
+    <publishers>
+    </publishers>
+
     <buildWrappers/>
 </project>"""
     }
@@ -118,6 +120,7 @@ class JenkinsConfigGeneratorTest {
                                 options: [value: 'cd c:\\']),
                         new BuildJobTask(type: BuildJobTask.Type.FAIL)
                 ])
+        buildJob.downstreamBuilds[BuildJob.Status.SUCCESS].add('parent')
         def generator = new JenkinsConfigGenerator(project, buildJob,
                 [] as HashMap, vcsConfig)
 
@@ -179,7 +182,17 @@ class JenkinsConfigGeneratorTest {
         <org.jvnet.hudson.test.FailureBuilder/>
     </builders>
 
-    <publishers/>
+    <publishers>
+        <hudson.tasks.BuildTrigger>
+            <childProjects>parent</childProjects>
+            <threshold>
+                <name>SUCCESS</name>
+                <ordinal>0</ordinal>
+                <color>BLUE</color>
+            </threshold>
+        </hudson.tasks.BuildTrigger>
+    </publishers>
+
     <buildWrappers/>
 </project>"""
     }

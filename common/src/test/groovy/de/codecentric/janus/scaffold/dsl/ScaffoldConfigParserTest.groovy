@@ -21,6 +21,7 @@ import org.junit.Test
 import de.codecentric.janus.scaffold.Scaffold
 import de.codecentric.janus.scaffold.BuildJobTask
 import de.codecentric.janus.Application
+import de.codecentric.janus.scaffold.BuildJob
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
@@ -65,6 +66,12 @@ class ScaffoldConfigParserTest {
                         jvmOptions: '-ea',
                         properties: 'something went wrong.'])
         assert scaffold.buildJobs[0].tasks[2].type == BuildJobTask.Type.FAIL
+        assert scaffold.buildJobs[0]
+                .downstreamBuilds[BuildJob.Status.SUCCESS]
+                .containsAll(['parent', 'deployment'])
+        assert scaffold.buildJobs[0]
+                .downstreamBuilds[BuildJob.Status.FAIL]
+                .containsAll(['cleanup'])
 
         assert scaffold.buildJobs[1].name == 'parent'
         assert scaffold.buildJobs[1].concurrentBuild

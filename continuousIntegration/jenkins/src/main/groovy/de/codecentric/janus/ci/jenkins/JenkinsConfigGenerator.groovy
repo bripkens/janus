@@ -75,6 +75,8 @@ class JenkinsConfigGenerator {
         context.encode = { String text ->
             StringEscapeUtils.escapeXml(text)
         }
+        context.SUCCESS = BuildJob.Status.SUCCESS
+        context.FAIL = BuildJob.Status.FAIL
         
         try {
             return template.make(context).toString()

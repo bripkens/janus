@@ -24,4 +24,15 @@ class BuildJob {
     boolean concurrentBuild = false
     List<BuildJobTask> tasks = []
     boolean disabled = false
+    Map<Status, List<String>> downstreamBuilds
+
+    BuildJob() {
+        downstreamBuilds = [] as HashMap
+        downstreamBuilds[Status.SUCCESS] = []
+        downstreamBuilds[Status.FAIL] = []
+    }
+
+    enum Status {
+        SUCCESS, FAIL
+    }
 }

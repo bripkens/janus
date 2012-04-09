@@ -23,9 +23,11 @@ import de.codecentric.janus.scaffold.BuildJob
  */
 class BuildJobDelegate {
     final BuildJob buildJob
+    final List<String> downstreamBuilds
 
     BuildJobDelegate(BuildJob buildJob) {
         this.buildJob = buildJob
+        downstreamBuilds = []
     }
 
     void concurrentBuild(boolean concurrentBuild) {
@@ -42,18 +44,34 @@ class BuildJobDelegate {
         closure()
     }
 
-    def propertyMissing(String name) {
+    def propertyMissing(String name, value) {
         switch (name) {
             case 'disabled':
                 buildJob.disabled = true
-                break;
+                break
             case 'concurrentBuild':
                 buildJob.concurrentBuild = true
                 break
+            case 'success':
+                return BuildJob.Status.SUCCESS
+            case 'failure':
+                return BuildJob.Status.FAIL
             default:
                 throw new MissingPropertyException("No such " +
                         "configuration option ${name}")
         }
     }
 
+    def methodMissing(String name, args) {
+        if (name == 'trigger') {
+            downstreamBuilds.addAll(args)
+            return this
+        } else if (name == 'on' && args.size() == 1) {
+            buildJob.downstreamBuilds[args[0]].addAll(downstreamBuilds)
+            downstreamBuilds.clear()
+        } else {
+            throw new MissingMethodException(name, BuildJobDelegate.class,
+                    args)
+        }
+    }
 }
