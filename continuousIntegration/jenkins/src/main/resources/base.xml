@@ -30,9 +30,9 @@ $vcsConfig
 $tasks
     </builders>
 
-    <publishers><% if (job.downstreamBuilds[SUCCESS]) { %>
+    <publishers><% if (prefixedDownStreamBuilds[SUCCESS]) { %>
         <hudson.tasks.BuildTrigger>
-            <childProjects>${encode(job.downstreamBuilds[SUCCESS].join(','))}</childProjects>
+            <childProjects>${encode(prefixedDownStreamBuilds[SUCCESS].join(','))}</childProjects>
             <threshold>
                 <name>SUCCESS</name>
                 <ordinal>0</ordinal>

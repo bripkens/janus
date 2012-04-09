@@ -184,7 +184,7 @@ class JenkinsConfigGeneratorTest {
 
     <publishers>
         <hudson.tasks.BuildTrigger>
-            <childProjects>parent</childProjects>
+            <childProjects>Janus-parent</childProjects>
             <threshold>
                 <name>SUCCESS</name>
                 <ordinal>0</ordinal>

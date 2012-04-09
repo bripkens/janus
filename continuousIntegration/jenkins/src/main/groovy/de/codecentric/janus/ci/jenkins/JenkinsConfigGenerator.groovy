@@ -51,8 +51,21 @@ class JenkinsConfigGenerator {
         def taskPartial = buildJob.tasks.collect { generateTaskPartial(it) }
                 .join('\n')
 
+        def prefixedDownStreamBuilds = [] as HashMap
+        buildJob.downstreamBuilds.each { key, value ->
+            def builds = []
+            
+            value.each { build ->
+                builds << "${project.name}-${build}"
+            }
+            
+            prefixedDownStreamBuilds[key] = builds
+        }
+
         return runThoughEngine(project: project, job: buildJob,
-                vcsConfig: vcsPartial, tasks: taskPartial, '/base.xml')
+                vcsConfig: vcsPartial, tasks: taskPartial,
+                prefixedDownStreamBuilds: prefixedDownStreamBuilds,
+                '/base.xml')
     }
     
     private String generateTaskPartial(BuildJobTask task) {
@@ -77,7 +90,7 @@ class JenkinsConfigGenerator {
         }
         context.SUCCESS = BuildJob.Status.SUCCESS
         context.FAIL = BuildJob.Status.FAIL
-        
+
         try {
             return template.make(context).toString()
         } finally {
