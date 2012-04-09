@@ -21,6 +21,7 @@ import de.codecentric.janus.conf.vcs.VCSConfig
 import groovy.text.SimpleTemplateEngine
 import groovy.text.Template
 import de.codecentric.janus.conf.Project
+import org.apache.commons.lang.StringEscapeUtils
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
@@ -40,7 +41,13 @@ class VCSPartialGenerator {
         SimpleTemplateEngine engine = new SimpleTemplateEngine()
         Template template = engine.createTemplate(templateReader)
         
-        template.make(['vcs': this.vcs, 'project': project]).toString()
+        Map context = ['vcs': this.vcs, 'project': project]
+
+        context.encode = { String text ->
+            StringEscapeUtils.escapeXml(text)
+        }
+        
+        template.make(context).toString()
     }
 
     private Reader getTemplateReader() {

@@ -15,7 +15,7 @@ buildJob {
                 pom: 'entities/pom.xml',
                 jvmOptions: '-ea',
                 properties: 'showSplash=true',
-                privateRepository: false
+                usePrivateRepository: false
 
         ant targets: 'clean build',
                 buildFile: 'build-ci.xml',

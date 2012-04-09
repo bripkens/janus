@@ -1,0 +1,3 @@
+        <hudson.tasks.BatchFile>
+            <command>${encode(job['value'])}</command>
+        </hudson.tasks.BatchFile>

@@ -57,7 +57,7 @@ class ScaffoldConfigParserTest {
                         pom: 'entities/pom.xml',
                         jvmOptions: '-ea',
                         properties: 'showSplash=true',
-                        privateRepository: false])
+                        usePrivateRepository: false])
         assertBuildTask(scaffold.buildJobs[0].tasks[1],
                 BuildJobTask.Type.ANT,
                 [targets: 'clean build',

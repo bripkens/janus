@@ -22,6 +22,7 @@ import de.codecentric.janus.conf.vcs.VCSConfig
 import de.codecentric.janus.scaffold.BuildJobTask
 import groovy.text.SimpleTemplateEngine
 import org.apache.commons.io.IOUtils
+import org.apache.commons.lang.StringEscapeUtils
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
@@ -71,6 +72,10 @@ class JenkinsConfigGenerator {
 
         def template = engine.createTemplate(input.newReader('UTF-8'))
 
+        context.encode = { String text ->
+            StringEscapeUtils.escapeXml(text)
+        }
+        
         try {
             return template.make(context).toString()
         } finally {

@@ -1,0 +1,3 @@
+        <hudson.tasks.Shell>
+            <command>${encode(job['value'])}</command>
+        </hudson.tasks.Shell>

@@ -21,8 +21,8 @@ package de.codecentric.janus.scaffold
  */
 class BuildJobTask {
     enum Type {
-        MAVEN(['targets'], [pom: 'pom.xml']),
-        ANT(['goals'], [buildFile: 'build.xml']),
+        MAVEN(['targets'], [pom: 'pom.xml', usePrivateRepository: false]),
+        ANT(['targets'], [buildFile: 'build.xml']),
         FAIL([], [] as HashMap),
         SHELL(['value'], [] as HashMap),
         BATCH(['value'], [] as HashMap)

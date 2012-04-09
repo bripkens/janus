@@ -23,5 +23,5 @@ class BuildJob {
     String name
     boolean concurrentBuild = false
     List<BuildJobTask> tasks = []
-    boolean disabled = true
+    boolean disabled = false
 }

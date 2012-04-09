@@ -1,0 +1,6 @@
+        <hudson.tasks.Ant>
+            <targets>${encode(job['targets'])}</targets><% if (job['jvmOptions']) { %>
+            <antOpts>${encode(job['jvmOptions'])}</antOpts><% } %>
+            <buildFile>${encode(job['buildFile'])}</buildFile><% if (job['properties']) { %>
+            <properties>${encode(job['properties'])}</properties><% } %>
+        </hudson.tasks.Ant>

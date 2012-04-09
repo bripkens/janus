@@ -1,6 +1,7 @@
         <hudson.tasks.Maven>
-            <targets>${job['targets']}</targets>
+            <targets>${encode(job['targets'])}</targets>
             <mavenName>(Default)</mavenName>
-            <pom>${job['pom']}</pom>
-            <usePrivateRepository>false</usePrivateRepository>
+            <pom>${encode(job['pom'])}</pom>
+            <usePrivateRepository>${job['usePrivateRepository']}</usePrivateRepository><% if (job['jvmOptions']) { %>
+            <jvmOptions>${encode(job['jvmOptions'])}</jvmOptions><% } %>
         </hudson.tasks.Maven>
