@@ -36,11 +36,27 @@ class BuildJobTasksDelegate {
                     BuildJobTasksDelegate.class, args)
         }
 
+        def arg = args[0]
+        if (arg instanceof String) {
+            arg = [value: arg]
+        }
+
         try {
             def type = BuildJobTask.Type.valueOf(name.toUpperCase())
-            buildJob.tasks << new BuildJobTask(type: type, options: args[0])
+            buildJob.tasks << new BuildJobTask(type: type, options: arg)
         } catch (IllegalArgumentException ex) {
             throw new MissingMethodException(name,
+                    BuildJobTasksDelegate.class, args)
+        }
+    }
+
+    def propertyMissing(String name) {
+        try {
+            def type = BuildJobTask.Type.valueOf(name.toUpperCase())
+            buildJob.tasks << new BuildJobTask(type: type,
+                    options: [] as HashMap)
+        } catch (IllegalArgumentException ex) {
+            throw new MissingPropertyException(name,
                     BuildJobTasksDelegate.class, args)
         }
     }

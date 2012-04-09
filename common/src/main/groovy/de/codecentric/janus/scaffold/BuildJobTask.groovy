@@ -21,7 +21,11 @@ package de.codecentric.janus.scaffold
  */
 class BuildJobTask {
     enum Type {
-        MAVEN(['targets'], [pom: 'pom.xml'])
+        MAVEN(['targets'], [pom: 'pom.xml']),
+        ANT(['goals'], [buildFile: 'build.xml']),
+        FAIL([], [] as HashMap),
+        SHELL(['value'], [] as HashMap),
+        BATCH(['value'], [] as HashMap)
 
         final List<String> requiredOptions
         final Map<String, String> defaultOptions
@@ -36,7 +40,7 @@ class BuildJobTask {
     Type type
     Map<String, String> options
 
-    String getAt(String key) {
+    def getAt(String key) {
         def value = options[key]
 
         if (value != null) {

@@ -1,13 +1,10 @@
-
-
 allprojects {
     apply plugin: 'eclipse'
     apply plugin: 'idea'
     
     group = 'de.codecentric.janus'
-    version = '0.2-SNAPSHOT'
+    version = '0.3-SNAPSHOT'
 }
-
 
 subprojects {
     apply plugin: 'groovy'

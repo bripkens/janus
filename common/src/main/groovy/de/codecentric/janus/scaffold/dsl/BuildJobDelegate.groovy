@@ -41,4 +41,19 @@ class BuildJobDelegate {
         closure.resolveStrategy = Closure.DELEGATE_FIRST
         closure()
     }
+
+    def propertyMissing(String name) {
+        switch (name) {
+            case 'disabled':
+                buildJob.disabled = true
+                break;
+            case 'concurrentBuild':
+                buildJob.concurrentBuild = true
+                break
+            default:
+                throw new MissingPropertyException("No such " +
+                        "configuration option ${name}")
+        }
+    }
+
 }

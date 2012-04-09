@@ -1,27 +1,38 @@
-scaffold {
-    name 'RESTful Web application'
-    description 'Web based project with RESTeasy based web service'
+name 'RESTful Web application'
+description 'Web based project with RESTeasy based web service'
 
-    requiredContext {
-        groupId 'Please see Maven groupId'
-        artifactId 'Plase see Maven artifactId'
+requiredContext {
+    groupId 'Please see Maven groupId'
+    artifactId 'Plase see Maven artifactId'
+}
+
+buildJob {
+    name 'entities'
+    disabled
+
+    tasks {
+        maven targets: 'clean package',
+                pom: 'entities/pom.xml',
+                jvmOptions: '-ea',
+                properties: 'showSplash=true',
+                privateRepository: false
+
+        ant targets: 'clean build',
+                buildFile: 'build-ci.xml',
+                jvmOptions: '-ea',
+                properties: 'something went wrong.'
+        fail
     }
+}
 
-    buildJob {
-        name 'entities'
+buildJob {
+    name 'parent'
+    concurrentBuild
 
-        tasks {
-            maven targets: 'clean package', pom: 'entities/pom.xml'
-        }
-    }
-
-    buildJob {
-        name 'parent'
-        concurrentBuild true
-
-        tasks {
-            maven targets: 'clean install'
-            maven targets: 'clean'
-        }
+    tasks {
+        maven targets: 'clean install'
+        maven targets: 'clean'
+        shell 'rm -rf /tmp/*'
+        batch 'del c:\\tmp'
     }
 }

@@ -18,6 +18,7 @@ package de.codecentric.janus.scaffold.dsl
 
 import groovy.util.logging.Slf4j
 import de.codecentric.janus.scaffold.Scaffold
+import de.codecentric.janus.scaffold.BuildJob
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
@@ -33,8 +34,24 @@ class ScaffoldConfigParser {
         Scaffold scaffold = new Scaffold()
 
         configScript.metaClass = create(Script.class) { ExpandoMetaClass emc ->
-            emc.scaffold = { Closure closure ->
-                closure.delegate = new ScaffoldDelegate(scaffold)
+            emc.name = { String name ->
+                scaffold.name = name
+            }
+
+            emc.description = { String description ->
+                scaffold.description = description
+            }
+
+            emc.requiredContext = { Closure closure ->
+                closure.delegate = new RequiredContextDelegate(scaffold)
+                closure.resolveStrategy = Closure.DELEGATE_FIRST
+                closure()
+            }
+
+            emc.buildJob = { Closure closure ->
+                def buildJob = new BuildJob()
+                scaffold.buildJobs << buildJob
+                closure.delegate = new BuildJobDelegate(buildJob)
                 closure.resolveStrategy = Closure.DELEGATE_FIRST
                 closure()
             }

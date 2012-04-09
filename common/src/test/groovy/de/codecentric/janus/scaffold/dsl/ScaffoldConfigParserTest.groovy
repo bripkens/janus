@@ -28,13 +28,15 @@ import de.codecentric.janus.Application
 class ScaffoldConfigParserTest {
     File config
 
-    @Before void setup() {
+    @Before
+    void setup() {
         Application.bootstrap()
         config = new File(this.getClass().getClassLoader()
                 .getResource('config.janus').toURI())
     }
 
-    @Test void testParse() {
+    @Test
+    void testParse() {
         Scaffold scaffold = ScaffoldConfigParser.parse(config)
 
         assert scaffold.name == 'RESTful Web application'
@@ -46,25 +48,47 @@ class ScaffoldConfigParserTest {
 
         assert scaffold.buildJobs.size() == 2
         assert scaffold.buildJobs[0].name == 'entities'
+        assert scaffold.buildJobs[0].disabled
         assert !scaffold.buildJobs[0].concurrentBuild
-        assert scaffold.buildJobs[0].tasks.size() == 1
-        assert scaffold.buildJobs[0].tasks[0].type == BuildJobTask.Type.MAVEN
-        assert scaffold.buildJobs[0].tasks[0].options.size() == 2
-        assert scaffold.buildJobs[0].tasks[0]['targets'] == 'clean package'
-        assert scaffold.buildJobs[0].tasks[0]['pom'] == 'entities/pom.xml'
+        assert scaffold.buildJobs[0].tasks.size() == 3
+        assertBuildTask(scaffold.buildJobs[0].tasks[0],
+                BuildJobTask.Type.MAVEN,
+                [targets: 'clean package',
+                        pom: 'entities/pom.xml',
+                        jvmOptions: '-ea',
+                        properties: 'showSplash=true',
+                        privateRepository: false])
+        assertBuildTask(scaffold.buildJobs[0].tasks[1],
+                BuildJobTask.Type.ANT,
+                [targets: 'clean build',
+                        buildFile: 'build-ci.xml',
+                        jvmOptions: '-ea',
+                        properties: 'something went wrong.'])
+        assert scaffold.buildJobs[0].tasks[2].type == BuildJobTask.Type.FAIL
 
         assert scaffold.buildJobs[1].name == 'parent'
         assert scaffold.buildJobs[1].concurrentBuild
-        assert scaffold.buildJobs[1].tasks.size() == 2
-        assert scaffold.buildJobs[1].tasks[0].type == BuildJobTask.Type.MAVEN
-        assert scaffold.buildJobs[1].tasks[0].options.size() == 1
-        assert scaffold.buildJobs[1].tasks[0]['targets'] == 'clean install'
-        assert scaffold.buildJobs[1].tasks[0]['pom'] == 'pom.xml'
-        assert scaffold.buildJobs[1].tasks[1].type == BuildJobTask.Type.MAVEN
-        assert scaffold.buildJobs[1].tasks[1].options.size() == 1
-        assert scaffold.buildJobs[1].tasks[1]['targets'] == 'clean'
-        assert scaffold.buildJobs[1].tasks[1]['pom'] == 'pom.xml'
+        assert scaffold.buildJobs[1].tasks.size() == 4
+        assertBuildTask(scaffold.buildJobs[1].tasks[0],
+                BuildJobTask.Type.MAVEN,
+                [targets: 'clean install', pom: 'pom.xml'])
+        assertBuildTask(scaffold.buildJobs[1].tasks[1],
+                BuildJobTask.Type.MAVEN,
+                [targets: 'clean', pom: 'pom.xml'])
+        assertBuildTask(scaffold.buildJobs[1].tasks[2],
+                BuildJobTask.Type.SHELL, [value: 'rm -rf /tmp/*'])
+        assertBuildTask(scaffold.buildJobs[1].tasks[3],
+                BuildJobTask.Type.BATCH, [value: 'del c:\\tmp'])
+    }
 
-        assert scaffold.buildJobs[1].tasks[1]['foobar'] == null
+    def assertBuildTask(given, expType, expOptions) {
+        assert given.type == expType
+        assertMap(expOptions, given)
+    }
+
+    def assertMap(exp, given) {
+        exp.each { key, value ->
+            assert given[key] == value
+        }
     }
 }
