@@ -3,7 +3,7 @@ allprojects {
     apply plugin: 'idea'
     
     group = 'de.codecentric.janus'
-    version = '0.3-SNAPSHOT'
+    version = '0.4-SNAPSHOT'
 }
 
 subprojects {
