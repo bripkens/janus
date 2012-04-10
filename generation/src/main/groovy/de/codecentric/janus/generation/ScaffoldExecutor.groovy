@@ -50,9 +50,18 @@ class ScaffoldExecutor {
         this.context = [] as HashMap<String, Object>
         this.context.putAll(context)
         this.context['project'] = project
+        this.context['toPackage'] = { toPackage(it) }
 
         pckg = project.pckg.replace('.', '/')
         engine = new SimpleTemplateEngine()
+    }
+
+    String toPackage(String suffix) {
+        if (project.pckg == null || project.pckg.isEmpty()) {
+            return suffix;
+        } else {
+            return "${project.pckg}.${suffix}"
+        }
     }
 
     void apply(File targetDir) {
