@@ -16,6 +16,13 @@ A Janus user interface is available through a [Jenkins plug-in](https://github.c
 
 # Version History
 
+## 0.4
+
+ - scaffold DSL now supports a wider range of standard build job steps:
+   Maven, Ant, Shell, Batch and automatic fail (UC-10).
+ - Jenkins CI config generator support for the new build steps (UC-10).
+
+
 ## 0.3
 
  - addition of static types to enable library usage from statically typed
@@ -33,6 +40,6 @@ A Janus user interface is available through a [Jenkins plug-in](https://github.c
  - reading and parsing scaffolds and scaffold catalogs (UC-5, UC-9).
  - simple DSL for continuous integration system config files (UC-10).
 
-# LICENSE
+# License
 
 Copyright (C) 2012 codecentric AG, Licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).
