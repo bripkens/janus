@@ -85,6 +85,7 @@ class JenkinsConfigGeneratorTest {
             <spec>* * * * *</spec>
         </hudson.triggers.SCMTrigger>
     </triggers>
+
     <concurrentBuild>
         false
     </concurrentBuild>
@@ -109,6 +110,7 @@ class JenkinsConfigGeneratorTest {
         def buildJob = new BuildJob(name: 'Main',
                 concurrentBuild: true,
                 disabled: true,
+                vcsTrigger: false,
                 tasks: [
                         new BuildJobTask(type: BuildJobTask.Type.MAVEN,
                                 options: [targets: 'clean install']),
@@ -153,11 +155,7 @@ class JenkinsConfigGeneratorTest {
     <disabled>true</disabled>
     <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
     <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-    <triggers class="vector">
-        <hudson.triggers.SCMTrigger>
-            <spec>* * * * *</spec>
-        </hudson.triggers.SCMTrigger>
-    </triggers>
+
     <concurrentBuild>
         true
     </concurrentBuild>

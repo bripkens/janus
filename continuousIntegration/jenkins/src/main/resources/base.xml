@@ -16,12 +16,13 @@ $vcsConfig
     <canRoam>true</canRoam>
     <disabled>${job.disabled}</disabled>
     <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
-    <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+    <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding><% if (job.vcsTrigger) { %>
     <triggers class="vector">
         <hudson.triggers.SCMTrigger>
             <spec>* * * * *</spec>
         </hudson.triggers.SCMTrigger>
-    </triggers>
+    </triggers><% } %>
+
     <concurrentBuild>
         $job.concurrentBuild
     </concurrentBuild>
