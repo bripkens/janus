@@ -20,6 +20,7 @@ A Janus user interface is available through a [Jenkins plug-in](https://github.c
 
  - scaffold DSL now supports a wider range of standard build job steps:
    Maven, Ant, Shell, Batch and automatic fail (UC-10).
+ - new DSL option "no vcs trigger" to deactivate VCS polling.
  - Jenkins CI config generator support for the new build steps (UC-10).
 
 

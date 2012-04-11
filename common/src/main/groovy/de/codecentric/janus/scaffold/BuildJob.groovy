@@ -25,6 +25,7 @@ class BuildJob {
     List<BuildJobTask> tasks = []
     boolean disabled = false
     Map<Status, List<String>> downstreamBuilds
+    boolean vcsTrigger = true
 
     BuildJob() {
         downstreamBuilds = [] as HashMap

@@ -44,6 +44,17 @@ class BuildJobDelegate {
         closure()
     }
 
+    Object no(String what) {
+        buildJob.vcsTrigger = false
+
+        // in order for the DSL to work, a property trigger must be accessible
+        // on the returned object. Since we don't need to track this
+        // property access, we just return a dummy object.
+        return new Object() {
+            def trigger = null;
+        };
+    }
+
     def propertyMissing(String name, value) {
         switch (name) {
             case 'disabled':
@@ -56,6 +67,8 @@ class BuildJobDelegate {
                 return BuildJob.Status.SUCCESS
             case 'failure':
                 return BuildJob.Status.FAIL
+            case 'vcs':
+                return 'vcs'
             default:
                 throw new MissingPropertyException("No such " +
                         "configuration option ${name}")

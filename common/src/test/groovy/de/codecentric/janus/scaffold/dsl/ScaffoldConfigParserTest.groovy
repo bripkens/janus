@@ -49,6 +49,7 @@ class ScaffoldConfigParserTest {
 
         assert scaffold.buildJobs.size() == 2
         assert scaffold.buildJobs[0].name == 'entities'
+        assert scaffold.buildJobs[0].vcsTrigger
         assert scaffold.buildJobs[0].disabled
         assert !scaffold.buildJobs[0].concurrentBuild
         assert scaffold.buildJobs[0].tasks.size() == 3
@@ -74,6 +75,7 @@ class ScaffoldConfigParserTest {
                 .containsAll(['cleanup'])
 
         assert scaffold.buildJobs[1].name == 'parent'
+        assert !scaffold.buildJobs[1].vcsTrigger
         assert scaffold.buildJobs[1].concurrentBuild
         assert scaffold.buildJobs[1].tasks.size() == 4
         assertBuildTask(scaffold.buildJobs[1].tasks[0],

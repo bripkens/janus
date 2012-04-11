@@ -32,6 +32,7 @@ buildJob {
 buildJob {
     name 'parent'
     concurrentBuild
+    no vcs trigger
 
     tasks {
         maven targets: 'clean install'
