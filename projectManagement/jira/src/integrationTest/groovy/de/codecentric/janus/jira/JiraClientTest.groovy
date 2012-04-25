@@ -3,6 +3,7 @@ package de.codecentric.janus.jira
 import org.junit.Test
 import org.junit.Before
 import com.atlassian.jira.rpc.soap.beans.RemoteGroup
+import com.atlassian.jira.rpc.soap.beans.RemotePermissionScheme
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
@@ -23,12 +24,20 @@ class JiraClientTest {
     }
 
     @Test
-    void testGroupCreation() {
-        def name = "biographer"
+    void shouldDeleteAndCreateGroups() {
+        def name = 'biographer'
 
         client.deleteGroup(name)
         RemoteGroup group = client.createGroup(name)
 
         assert group.name == name
+    }
+
+    @Test void shouldRetrieveAPermissionScheme() {
+        def name = 'Default Permission Scheme'
+
+        RemotePermissionScheme scheme = client.getPermissionScheme(name)
+
+        assert scheme.name == name
     }
 }
