@@ -1,0 +1,85 @@
+sourceSets {
+    integrationTest {
+        compileClasspath = sourceSets.main.output + configurations.testRuntime
+        runtimeClasspath = output + sourceSets.main.output + configurations.testRuntime
+        groovy {
+            srcDir 'src/integrationTest/groovy'
+        }
+    }
+}
+
+task integrationTest(type: Test) {
+    testClassesDir = sourceSets.integrationTest.output.classesDir
+    classpath = sourceSets.integrationTest.runtimeClasspath
+}
+
+configurations {
+    // needs to be defined in order to create the dependency group
+    axisGenAntTask
+}
+
+dependencies {
+    compile project(':common')
+
+    compile group: 'org.codehaus.groovy.modules.http-builder',
+            name: 'http-builder',
+            version: '0.5.2'
+
+    compile group: 'commons-io',
+            name: 'commons-io',
+            version: '2.1'
+
+    compile group: 'commons-lang',
+            name: 'commons-lang',
+            version: '2.6'
+
+    compile group: 'org.apache.axis',
+            name: 'axis',
+            version: '1.4'
+
+    compile group: 'org.apache.axis',
+            name: 'axis-jaxrpc',
+            version: '1.4'
+
+    compile group: 'org.apache.axis',
+            name: 'axis-saaj',
+            version: '1.4'
+
+    compile group: 'axis',
+            name: 'axis-wsdl4j',
+            version: '1.5.1'
+
+    compile group: 'commons-discovery',
+            name: 'commons-discovery',
+            version: '0.2'
+
+    axisGenAntTask 'org.apache.axis:axis-ant:1.4',
+            'org.apache.axis:axis:1.4',
+            'org.apache.axis:axis-jaxrpc:1.4',
+            'axis:axis-wsdl4j:1.5.1',
+            'commons-codec:commons-codec:1.3',
+            'commons-logging:commons-logging:1.1.1',
+            'commons-discovery:commons-discovery:0.2'
+}
+
+task genWsdlClasses << {
+    // See http://gradle.org/docs/1.0-rc-2/userguide/ant.html
+    ant.taskdef(name: 'genClassesFromWSDL',
+            classname: 'org.apache.axis.tools.ant.wsdl.Wsdl2javaAntTask',
+            classpath: configurations.axisGenAntTask.asPath)
+
+    def wsdlLocation = 'src/main/wsdl/jirav2.wsdl'
+    def namespace = 'http://jira.atlassian.com/rpc/soap/jirasoapservice-v2'
+    def pckg = 'com.atlassian.jira.rpc.soap'
+
+    def output = "$buildDir/generated-src/jirav2"
+    outputFile = file(output)
+    outputFile.exists() || outputFile.mkdirs()
+    outputs.dir outputFile
+
+    ant.genClassesFromWSDL(url: wsdlLocation, output: output) {
+        mapping(namespace: namespace, package: pckg)
+    }
+}
+
+compileJava.source genWsdlClasses.outputs.files, sourceSets.main.java
