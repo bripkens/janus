@@ -9,6 +9,7 @@ class Session {
 
     JiraSoapSession jiraSoapSession
     JiraSoapClient jiraSoapClient
+    JiraRestClient jiraRestClient
 
     Session(String baseUrl) {
         this.baseUrl = baseUrl
@@ -35,6 +36,12 @@ class Session {
             jiraSoapClient = new JiraSoapClientImpl(getJiraSoapSession())
         }
         return jiraSoapClient
+    }
 
+    JiraRestClient getJiraRestClient() {
+        if (jiraRestClient == null) {
+            jiraRestClient = new JiraRestClientImpl(credentials, baseUrl)
+        }
+        return jiraRestClient
     }
 }

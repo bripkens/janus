@@ -87,11 +87,12 @@ class JenkinsProjectCreator {
             requestContentType = XML
             body = jobConfig
 
-            /*response.success = { HttpResponse resp ->
-
-            }*/
+            response.success = { HttpResponse resp ->
+                resp.entity.consumeContent()
+            }
 
             response.failure = { HttpResponse resp ->
+                resp.entity.consumeContent()
                 throw new JenkinsConfigurationException(
                         "Unexpected error: ${resp.statusLine.statusCode}: " +
                                 resp.statusLine.reasonPhrase)
