@@ -40,6 +40,11 @@ class JiraClient implements JiraSoapClient, JiraRestClient {
     }
 
     @Override
+    RemoteGroup getGroup(String groupName) {
+        return session.getJiraSoapClient().getGroup(groupName)
+    }
+
+    @Override
     void deleteGroup(String groupName) {
         session.getJiraSoapClient().deleteGroup(groupName)
     }

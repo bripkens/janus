@@ -18,11 +18,11 @@ package de.codecentric.janus.jira
 
 import org.junit.Test
 import org.junit.Before
-import static org.junit.Assert.assertThat
-import static org.hamcrest.CoreMatchers.*
-import static org.hamcrest.Matcher.*
+
 import com.atlassian.jira.rpc.soap.beans.RemoteGroup
 import com.atlassian.jira.rpc.soap.beans.RemotePermissionScheme
+import com.atlassian.jira.rpc.soap.beans.RemoteUser
+import com.atlassian.jira.rpc.soap.beans.RemoteProject
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
@@ -30,24 +30,59 @@ import com.atlassian.jira.rpc.soap.beans.RemotePermissionScheme
 class JiraClientTest {
 
     static final String BASE_URL = 'http://localhost:47623',
-            USERNAME = 'janustestadmin',
-            PASSWORD = 'janusRocks'
+                        USERNAME = 'janustestadmin',
+                        PASSWORD = 'janusRocks',
+                        TEST_GROUP_NAME = 'janus-users',
+                        TEST_USER_USERNAME = 'tom',
+                        TEST_USER_PASSWORD = '12345',
+                        TEST_USER_FULL_NAME = 'Tom Tomson',
+                        TEST_USER_EMAIL = 'tom@example.com',
+                        TEST_PROJECT_NAME = 'janus',
+                        TEST_PROJECT_KEY = 'JAN'
 
     Session session
     JiraClient client
 
-    @Before void setup() {
+    @Before
+    void setup() {
         session = new Session(BASE_URL, USERNAME, PASSWORD)
         client = new JiraClient(session)
     }
 
-    @Test void shouldDeleteAndCreateGroups() {
-        def name = 'biographer'
+    def createTestGroup() {
+        // for idempotent test
+        client.deleteGroup(TEST_GROUP_NAME)
+        return client.createGroup(TEST_GROUP_NAME)
+    }
 
-        client.deleteGroup(name)
-        RemoteGroup group = client.createGroup(name)
+    def createTestUser() {
+        // for idempotent test
+        client.deleteUser(TEST_USER_USERNAME)
+        return client.createUser(TEST_USER_USERNAME, TEST_USER_PASSWORD,
+                TEST_USER_FULL_NAME, TEST_USER_EMAIL)
+    }
 
-        assert group.name == name
+    def getUserValidator() {
+        return {
+            it.name == TEST_USER_USERNAME && it.email == TEST_USER_EMAIL &&
+                    it.fullname == TEST_USER_FULL_NAME
+        }
+    }
+
+    def createTestProject() {
+        // for idempotent test
+        client.deleteProject(TEST_PROJECT_KEY)
+
+        RemoteProject project = new RemoteProject();
+        project.setName(TEST_PROJECT_NAME);
+        project.setKey(TEST_PROJECT_KEY);
+        project.setLead(USERNAME);
+        project.setPermissionScheme(client
+                .getPermissionScheme("Default Permission Scheme"));
+        project.setNotificationScheme(client
+                .getNotificationScheme("Default Notification Scheme"));
+
+        return client.createProject(project)
     }
 
     @Test void shouldRetrieveDefaultPermissionScheme() {
@@ -78,5 +113,37 @@ class JiraClientTest {
 
     @Test void shouldSearchUser() {
         assert client.searchUser(USERNAME).any { it.name == USERNAME }
+    }
+
+    @Test void shouldCreateGroup() {
+        RemoteGroup group = createTestGroup()
+
+        assert group.name == TEST_GROUP_NAME
+        assert client.getGroup(TEST_GROUP_NAME).name == TEST_GROUP_NAME
+        assert client.getGroups().any { it.name == TEST_GROUP_NAME }
+    }
+
+    @Test void shouldCreateUser() {
+        RemoteUser user = createTestUser()
+
+        assert userValidator(user)
+        assert client.searchUser(TEST_USER_USERNAME).any(userValidator)
+    }
+
+    @Test void shouldAddUsersToGroup() {
+        RemoteUser user = createTestUser()
+        RemoteGroup group = createTestGroup()
+
+        client.addUserToGroup(group, user)
+
+        group = client.getGroup(group.name)
+        assert group.users.any { it.name == user.name }
+        assert group.users.length == 1
+    }
+
+    @Test void shouldCreateProject() {
+        RemoteProject project = createTestProject()
+
+        assert project.name == TEST_PROJECT_NAME
     }
 }

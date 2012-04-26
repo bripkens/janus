@@ -44,6 +44,13 @@ class JiraSoapClientImpl implements JiraSoapClient {
     }
 
     @Override
+    RemoteGroup getGroup(String groupName) {
+        return maskRemoteException {
+            service.getGroup(token, groupName)
+        }
+    }
+
+    @Override
     void deleteGroup(String groupName) {
         maskRemoteException {
             try {
@@ -119,7 +126,11 @@ class JiraSoapClientImpl implements JiraSoapClient {
     @Override
     void deleteProject(String projectKey) {
         maskRemoteException {
-            service.deleteProject(token, projectKey)
+            try {
+                service.deleteProject(token, projectKey)
+            } catch (RemoteValidationException ex) {
+                // thrown when no project with this key exists
+            }
         }
     }
 

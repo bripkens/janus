@@ -30,6 +30,7 @@ import com.atlassian.jira.rpc.soap.beans.RemoteRoleActors
  * @author Ben Ripkens <bripkens.dev@gmail.com>
  */
 public interface JiraSoapClient {
+    RemoteGroup getGroup(String groupName)
     void deleteGroup(String groupName)
     RemoteGroup createGroup(String groupName)
     RemoteProject getProject(String key)
