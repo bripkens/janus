@@ -14,24 +14,15 @@
  * limitations under the License.
  */
 
-package de.codecentric.janus.jira
+package de.codecentric.janus.atlassian.model
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
  */
-class JiraException extends RuntimeException {
-    JiraException() {
-    }
+class RemoteGroupSummary {
+    final String name
 
-    JiraException(String message) {
-        super(message)
-    }
-
-    JiraException(String message, Throwable cause) {
-        super(message, cause)
-    }
-
-    JiraException(Throwable cause) {
-        super(cause)
+    RemoteGroupSummary(String name) {
+        this.name = name
     }
 }

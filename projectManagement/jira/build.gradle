@@ -68,17 +68,27 @@ task genWsdlClasses << {
             classname: 'org.apache.axis.tools.ant.wsdl.Wsdl2javaAntTask',
             classpath: configurations.axisGenAntTask.asPath)
 
-    def wsdlLocation = 'src/main/wsdl/jirav2.wsdl'
-    def namespace = 'http://jira.atlassian.com/rpc/soap/jirasoapservice-v2'
-    def pckg = 'com.atlassian.jira.rpc.soap'
+    def configs = [
+            [
+                wsdl: 'src/main/wsdl/jirav2.wsdl',
+                namespace: 'http://jira.atlassian.com/rpc/soap/jirasoapservice-v2',
+                pckg: 'com.atlassian.jira.rpc.soap'
+            ], [
+                wsdl: 'src/main/wsdl/confluencev2.wsdl',
+                namespace: 'http://confluence.atlassian.com/rpc/soap-axis/confluenceservice-v2',
+                pckg: 'com.atlassian.confluence.rpc.soap'
+            ]
+    ]
 
     def output = "$buildDir/generated-src/jirav2"
     outputFile = file(output)
     outputFile.exists() || outputFile.mkdirs()
     outputs.dir outputFile
 
-    ant.genClassesFromWSDL(url: wsdlLocation, output: output) {
-        mapping(namespace: namespace, package: pckg)
+    configs.each { config ->
+        ant.genClassesFromWSDL(url: config.wsdl, output: output) {
+            mapping(namespace: config.namespace, package: config.pckg)
+        }
     }
 }
 

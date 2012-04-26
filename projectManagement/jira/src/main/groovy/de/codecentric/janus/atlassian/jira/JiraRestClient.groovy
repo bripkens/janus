@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package de.codecentric.janus.jira
+package de.codecentric.janus.atlassian.jira;
+
+import de.codecentric.janus.atlassian.model.RemoteGroupSummary
+import de.codecentric.janus.atlassian.model.RemoteProjectSummary
+import com.atlassian.jira.rpc.soap.beans.RemoteUser;
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
  */
-class Credentials {
-    final String name, password
-
-    Credentials(String name, String password) {
-        this.name = name
-        this.password = password
-    }
+public interface JiraRestClient {
+    RemoteGroupSummary[] getGroups()
+    RemoteProjectSummary[] getProjects()
+    RemoteUser[] searchUser(String name)
 }

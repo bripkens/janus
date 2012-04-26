@@ -14,17 +14,24 @@
  * limitations under the License.
  */
 
-package de.codecentric.janus.jira;
-
-import de.codecentric.janus.jira.model.RemoteGroupSummary
-import de.codecentric.janus.jira.model.RemoteProjectSummary
-import com.atlassian.jira.rpc.soap.beans.RemoteUser;
+package de.codecentric.janus.atlassian
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
  */
-public interface JiraRestClient {
-    RemoteGroupSummary[] getGroups()
-    RemoteProjectSummary[] getProjects()
-    RemoteUser[] searchUser(String name)
+class AtlassianException extends RuntimeException {
+    AtlassianException() {
+    }
+
+    AtlassianException(String message) {
+        super(message)
+    }
+
+    AtlassianException(String message, Throwable cause) {
+        super(message, cause)
+    }
+
+    AtlassianException(Throwable cause) {
+        super(cause)
+    }
 }

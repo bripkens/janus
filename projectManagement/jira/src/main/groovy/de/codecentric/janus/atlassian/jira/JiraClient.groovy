@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package de.codecentric.janus.jira
+package de.codecentric.janus.atlassian.jira
 
 import com.atlassian.jira.rpc.soap.beans.RemoteGroup
 import com.atlassian.jira.rpc.soap.beans.RemoteProject
@@ -25,8 +25,8 @@ import com.atlassian.jira.rpc.soap.beans.RemoteEntity
 import com.atlassian.jira.rpc.soap.beans.RemoteProjectRole
 import com.atlassian.jira.rpc.soap.beans.RemoteUser
 import com.atlassian.jira.rpc.soap.beans.RemoteRoleActors
-import de.codecentric.janus.jira.model.RemoteGroupSummary
-import de.codecentric.janus.jira.model.RemoteProjectSummary
+import de.codecentric.janus.atlassian.model.RemoteGroupSummary
+import de.codecentric.janus.atlassian.model.RemoteProjectSummary
 import com.atlassian.jira.rpc.soap.beans.RemoteProjectRoleActors
 
 /**
@@ -34,9 +34,9 @@ import com.atlassian.jira.rpc.soap.beans.RemoteProjectRoleActors
  */
 class JiraClient implements JiraSoapClient, JiraRestClient {
 
-    final Session session
+    final JiraSession session
 
-    JiraClient(Session session) {
+    JiraClient(JiraSession session) {
         this.session = session
     }
 

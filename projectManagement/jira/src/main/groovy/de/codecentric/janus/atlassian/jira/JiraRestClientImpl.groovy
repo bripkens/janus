@@ -14,9 +14,16 @@
  * limitations under the License.
  */
 
-package de.codecentric.janus.jira
+package de.codecentric.janus.atlassian.jira
 
+import com.atlassian.jira.rpc.soap.beans.RemoteUser
+import de.codecentric.janus.atlassian.Credentials
+import de.codecentric.janus.atlassian.AtlassianException
+import de.codecentric.janus.atlassian.model.RemoteGroupSummary
+import de.codecentric.janus.atlassian.model.RemoteProjectSummary
+import groovy.json.JsonSlurper
 import groovyx.net.http.HTTPBuilder
+import org.apache.http.HttpEntity
 import org.apache.http.HttpRequest
 import org.apache.http.HttpRequestInterceptor
 import org.apache.http.HttpResponse
@@ -24,11 +31,6 @@ import org.apache.http.protocol.HttpContext
 
 import static groovyx.net.http.ContentType.ANY
 import static groovyx.net.http.Method.GET
-import groovy.json.JsonSlurper
-import org.apache.http.HttpEntity
-import de.codecentric.janus.jira.model.RemoteGroupSummary
-import de.codecentric.janus.jira.model.RemoteProjectSummary
-import com.atlassian.jira.rpc.soap.beans.RemoteUser
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
@@ -141,7 +143,7 @@ class JiraRestClientImpl implements JiraRestClient {
     private Closure getDefaultFailureHandler() {
         return { HttpResponse resp ->
             resp.entity.consumeContent()
-            throw new JiraClientException('Unexpected error ' +
+            throw new AtlassianException('Unexpected error ' +
                     resp.statusLine.statusCode + ': ' +
                     resp.statusLine.reasonPhrase)
         }

@@ -14,15 +14,24 @@
  * limitations under the License.
  */
 
-package de.codecentric.janus.jira.model
+package de.codecentric.janus.atlassian
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
  */
-class RemoteGroupSummary {
-    final String name
+class AtlassianConnectionException extends AtlassianException {
+    AtlassianConnectionException() {
+    }
 
-    RemoteGroupSummary(String name) {
-        this.name = name
+    AtlassianConnectionException(String message) {
+        super(message)
+    }
+
+    AtlassianConnectionException(String message, Throwable cause) {
+        super(message, cause)
+    }
+
+    AtlassianConnectionException(Throwable cause) {
+        super(cause)
     }
 }

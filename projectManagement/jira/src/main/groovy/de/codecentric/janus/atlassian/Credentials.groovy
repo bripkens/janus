@@ -14,24 +14,16 @@
  * limitations under the License.
  */
 
-package de.codecentric.janus.jira
+package de.codecentric.janus.atlassian
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
  */
-class JiraClientException extends JiraException {
-    JiraClientException() {
-    }
+class Credentials {
+    final String name, password
 
-    JiraClientException(String message) {
-        super(message)
-    }
-
-    JiraClientException(String message, Throwable cause) {
-        super(message, cause)
-    }
-
-    JiraClientException(Throwable cause) {
-        super(cause)
+    Credentials(String name, String password) {
+        this.name = name
+        this.password = password
     }
 }

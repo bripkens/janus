@@ -14,21 +14,15 @@
  * limitations under the License.
  */
 
-package de.codecentric.janus.jira
+package de.codecentric.janus.atlassian.jira
 
 import com.atlassian.jira.rpc.exception.RemoteValidationException
-import com.atlassian.jira.rpc.soap.beans.RemoteGroup
-import java.rmi.RemoteException
 import com.atlassian.jira.rpc.soap.JiraSoapService
-import com.atlassian.jira.rpc.soap.beans.RemoteProject
-import com.atlassian.jira.rpc.soap.beans.RemotePermissionScheme
-import com.atlassian.jira.rpc.soap.beans.RemoteScheme
-import com.atlassian.jira.rpc.soap.beans.RemotePermission
-import com.atlassian.jira.rpc.soap.beans.RemoteEntity
-import com.atlassian.jira.rpc.soap.beans.RemoteProjectRole
-import com.atlassian.jira.rpc.soap.beans.RemoteUser
-import com.atlassian.jira.rpc.soap.beans.RemoteRoleActors
-import com.atlassian.jira.rpc.soap.beans.RemoteProjectRoleActors
+
+import java.rmi.RemoteException
+
+import com.atlassian.jira.rpc.soap.beans.*
+import de.codecentric.janus.atlassian.AtlassianException
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
@@ -205,7 +199,7 @@ class JiraSoapClientImpl implements JiraSoapClient {
         try {
             return closure()
         } catch (RemoteException ex) {
-            throw new JiraClientException(ex)
+            throw new AtlassianException(ex)
         }
     }
 }

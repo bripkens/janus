@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package de.codecentric.janus.jira.model
+package de.codecentric.janus.atlassian.model
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>

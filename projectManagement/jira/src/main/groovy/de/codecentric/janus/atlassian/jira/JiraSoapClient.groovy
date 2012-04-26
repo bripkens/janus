@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package de.codecentric.janus.jira
+package de.codecentric.janus.atlassian.jira
 
 import com.atlassian.jira.rpc.soap.beans.RemoteGroup
 import com.atlassian.jira.rpc.soap.beans.RemoteProject

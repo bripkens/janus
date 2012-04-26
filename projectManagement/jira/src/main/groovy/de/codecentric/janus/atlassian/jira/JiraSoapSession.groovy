@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package de.codecentric.janus.jira
+package de.codecentric.janus.atlassian.jira
 
 import com.atlassian.jira.rpc.soap.JiraSoapServiceServiceLocator
 import com.atlassian.jira.rpc.soap.JiraSoapService
 import com.atlassian.jira.rpc.soap.JiraSoapServiceService
 import javax.xml.rpc.ServiceException
 import groovy.util.logging.Slf4j
+import de.codecentric.janus.atlassian.Credentials
+
+import de.codecentric.janus.atlassian.AtlassianConnectionException
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
@@ -45,15 +48,15 @@ class JiraSoapSession {
         try {
             service = serviceLocator
                     .getJirasoapserviceV2(endpoint);
-            log.info("Connected to ${endpoint.toExternalForm()}")
+            de.codecentric.janus.atlassian.jira.JiraSoapSession.log.info("Connected to ${endpoint.toExternalForm()}")
         } catch (ServiceException e) {
-            throw new JiraConnectionException("ServiceException during " +
+            throw new AtlassianConnectionException("ServiceException during " +
                     "SOAPClient contruction", e);
         }
 
         if (credentials != null) {
             authToken = service.login(credentials.name, credentials.password)
-            log.info("Logged into Jira SOAP service.")
+            de.codecentric.janus.atlassian.jira.JiraSoapSession.log.info("Logged into Jira SOAP service.")
         }
     }
 

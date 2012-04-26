@@ -14,18 +14,11 @@
  * limitations under the License.
  */
 
-package de.codecentric.janus.jira
+package de.codecentric.janus.atlassian.jira
 
-import org.junit.Test
 import org.junit.Before
-
-import com.atlassian.jira.rpc.soap.beans.RemoteGroup
-import com.atlassian.jira.rpc.soap.beans.RemotePermissionScheme
-import com.atlassian.jira.rpc.soap.beans.RemoteUser
-import com.atlassian.jira.rpc.soap.beans.RemoteProject
-import com.atlassian.jira.rpc.soap.beans.RemoteProjectRole
-import com.atlassian.jira.rpc.soap.beans.RemoteProjectRoleActors
-import com.atlassian.jira.rpc.soap.beans.RemoteRoleActor
+import org.junit.Test
+import com.atlassian.jira.rpc.soap.beans.*
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
@@ -43,12 +36,12 @@ class JiraClientTest {
                         TEST_PROJECT_NAME = 'janus',
                         TEST_PROJECT_KEY = 'JAN'
 
-    Session session
+    JiraSession session
     JiraClient client
 
     @Before
     void setup() {
-        session = new Session(BASE_URL, USERNAME, PASSWORD)
+        session = new JiraSession(BASE_URL, USERNAME, PASSWORD)
         client = new JiraClient(session)
     }
 

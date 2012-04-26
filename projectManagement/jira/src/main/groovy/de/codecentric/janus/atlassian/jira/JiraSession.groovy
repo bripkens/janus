@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package de.codecentric.janus.jira
+package de.codecentric.janus.atlassian.jira
+
+import de.codecentric.janus.atlassian.Credentials
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
  */
-class Session {
+class JiraSession {
     final String baseUrl
     final Credentials credentials
 
@@ -27,11 +29,11 @@ class Session {
     JiraSoapClient jiraSoapClient
     JiraRestClient jiraRestClient
 
-    Session(String baseUrl) {
+    JiraSession(String baseUrl) {
         this.baseUrl = baseUrl
     }
 
-    Session(String baseUrl, String name, String password) {
+    JiraSession(String baseUrl, String name, String password) {
         this.baseUrl = baseUrl
         credentials = new Credentials(name, password)
     }
