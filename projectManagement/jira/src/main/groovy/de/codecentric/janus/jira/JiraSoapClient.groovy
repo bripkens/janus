@@ -25,6 +25,7 @@ import com.atlassian.jira.rpc.soap.beans.RemotePermission
 import com.atlassian.jira.rpc.soap.beans.RemoteProjectRole
 import com.atlassian.jira.rpc.soap.beans.RemoteUser
 import com.atlassian.jira.rpc.soap.beans.RemoteRoleActors
+import com.atlassian.jira.rpc.soap.beans.RemoteProjectRoleActors
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
@@ -54,4 +55,6 @@ public interface JiraSoapClient {
     void addGroupToRole(RemoteProject project, RemoteGroup group,
                         RemoteProjectRole role)
     RemoteRoleActors getDefaultRoleActors(RemoteProjectRole role)
+    RemoteProjectRoleActors getProjectRoleActors(RemoteProject project,
+                                                 RemoteProjectRole role)
 }

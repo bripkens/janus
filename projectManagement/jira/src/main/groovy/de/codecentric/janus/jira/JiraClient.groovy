@@ -27,6 +27,7 @@ import com.atlassian.jira.rpc.soap.beans.RemoteUser
 import com.atlassian.jira.rpc.soap.beans.RemoteRoleActors
 import de.codecentric.janus.jira.model.RemoteGroupSummary
 import de.codecentric.janus.jira.model.RemoteProjectSummary
+import com.atlassian.jira.rpc.soap.beans.RemoteProjectRoleActors
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
@@ -118,7 +119,8 @@ class JiraClient implements JiraSoapClient, JiraRestClient {
     }
 
     @Override
-    RemoteUser createUser(String username, String password, String fullName, String email) {
+    RemoteUser createUser(String username, String password, String fullName,
+                          String email) {
         return session.getJiraSoapClient().createUser(username, password,
                 fullName, email)
     }
@@ -134,13 +136,20 @@ class JiraClient implements JiraSoapClient, JiraRestClient {
     }
 
     @Override
-    void addGroupToRole(RemoteProject project, RemoteGroup group, RemoteProjectRole role) {
+    void addGroupToRole(RemoteProject project, RemoteGroup group,
+                        RemoteProjectRole role) {
         session.getJiraSoapClient().addGroupToRole(project, group, role)
     }
 
     @Override
     RemoteRoleActors getDefaultRoleActors(RemoteProjectRole role) {
         return session.getJiraSoapClient().getDefaultRoleActors(role)
+    }
+
+    @Override
+    RemoteProjectRoleActors getProjectRoleActors(RemoteProject project,
+                                                 RemoteProjectRole role) {
+        return session.getJiraSoapClient().getProjectRoleActors(project, role)
     }
 
     @Override

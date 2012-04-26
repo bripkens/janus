@@ -28,6 +28,7 @@ import com.atlassian.jira.rpc.soap.beans.RemoteEntity
 import com.atlassian.jira.rpc.soap.beans.RemoteProjectRole
 import com.atlassian.jira.rpc.soap.beans.RemoteUser
 import com.atlassian.jira.rpc.soap.beans.RemoteRoleActors
+import com.atlassian.jira.rpc.soap.beans.RemoteProjectRoleActors
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
@@ -189,6 +190,14 @@ class JiraSoapClientImpl implements JiraSoapClient {
     RemoteRoleActors getDefaultRoleActors(RemoteProjectRole role) {
         return maskRemoteException {
             return service.getDefaultRoleActors(token, role)
+        }
+    }
+
+    @Override
+    RemoteProjectRoleActors getProjectRoleActors(RemoteProject project,
+                                                 RemoteProjectRole role) {
+        return maskRemoteException {
+            return service.getProjectRoleActors(token, role, project)
         }
     }
 

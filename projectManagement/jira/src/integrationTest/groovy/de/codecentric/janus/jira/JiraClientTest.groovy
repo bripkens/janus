@@ -23,6 +23,9 @@ import com.atlassian.jira.rpc.soap.beans.RemoteGroup
 import com.atlassian.jira.rpc.soap.beans.RemotePermissionScheme
 import com.atlassian.jira.rpc.soap.beans.RemoteUser
 import com.atlassian.jira.rpc.soap.beans.RemoteProject
+import com.atlassian.jira.rpc.soap.beans.RemoteProjectRole
+import com.atlassian.jira.rpc.soap.beans.RemoteProjectRoleActors
+import com.atlassian.jira.rpc.soap.beans.RemoteRoleActor
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
@@ -145,5 +148,18 @@ class JiraClientTest {
         RemoteProject project = createTestProject()
 
         assert project.name == TEST_PROJECT_NAME
+        assert project.key == TEST_PROJECT_KEY
+        assert project.lead == USERNAME
+    }
+
+    @Test void shouldAddGroupToRole() {
+        RemoteProject project = createTestProject()
+        RemoteGroup group = createTestGroup()
+        RemoteProjectRole role = client.getProjectRole("Developers")
+
+        client.addGroupToRole(project, group, role)
+
+        RemoteProjectRoleActors actors = client.getProjectRoleActors(project, role)
+        assert actors.roleActors.any { it.descriptor == group.name }
     }
 }
