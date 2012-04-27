@@ -47,12 +47,8 @@ class JiraSoapClientImpl implements JiraSoapClient {
 
     @Override
     void deleteGroup(String groupName) {
-        maskRemoteException {
-            try {
-                service.deleteGroup(token, groupName, null)
-            } catch (RemoteValidationException ex) {
-                // gets thrown when the group does not exist.
-            }
+        maskRemoteException(RemoteValidationException) {
+            service.deleteGroup(token, groupName, null)
         }
     }
 
@@ -120,12 +116,8 @@ class JiraSoapClientImpl implements JiraSoapClient {
 
     @Override
     void deleteProject(String projectKey) {
-        maskRemoteException {
-            try {
-                service.deleteProject(token, projectKey)
-            } catch (RemoteValidationException ex) {
-                // thrown when no project with this key exists
-            }
+        maskRemoteException(RemoteValidationException.class) {
+            service.deleteProject(token, projectKey)
         }
     }
 
@@ -159,7 +151,7 @@ class JiraSoapClientImpl implements JiraSoapClient {
 
     @Override
     void deleteUser(String username) {
-        maskRemoteException {
+        maskRemoteException(RemoteValidationException.class) {
             service.deleteUser(token, username)
         }
     }
@@ -195,10 +187,35 @@ class JiraSoapClientImpl implements JiraSoapClient {
         }
     }
 
+    private maskRemoteException(Class<?> ignore, Closure closure) {
+        try {
+            return closure()
+        } catch (Exception ex) {
+            // The remote exception are captured in a non-standard way.
+            // The only possible way to identify the root cause is the toString
+            // method. The root cause is not listed as ex.cause neither
+            // part of ex.suppressed or ex.message.
+            println ex.toString()
+
+            if (ex.toString().contains(ignore.name)) {
+                println "Ignoring exception"
+                return
+            }
+
+            if (ex instanceof RemoteException) {
+                throw new AtlassianException(ex)
+            }
+
+            throw ex
+        }
+    }
+
     private maskRemoteException(Closure closure) {
         try {
             return closure()
         } catch (RemoteException ex) {
+            println "Original exception ${ex.class.name}"
+            println "Wrapped exception ${ex.cause}"
             throw new AtlassianException(ex)
         }
     }

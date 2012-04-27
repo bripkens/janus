@@ -8,7 +8,7 @@ This component was tested using Jenkins version 1.450.
 
 ## Tests
 
-In order to run the tests, a JIRA instance needs to be running locally under
+In order to run the tests, a Jenkins instance needs to be running locally under
 port 8080. A user with credentials test:12345 should be created. Also, make
 sure that no build job called "Janus" exists.
 

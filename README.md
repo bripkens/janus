@@ -22,6 +22,8 @@ A Janus user interface is available through a [Jenkins plug-in](https://github.c
    Maven, Ant, Shell, Batch and automatic fail (UC-10).
  - new DSL option "no vcs trigger" to deactivate VCS polling.
  - Jenkins CI config generator support for the new build steps (UC-10).
+ - JIRA SOAP and REST API wrapper (UC-11).
+ - Basic Confluence SOAP API wrapper (UC-11).
 
 
 ## 0.3
