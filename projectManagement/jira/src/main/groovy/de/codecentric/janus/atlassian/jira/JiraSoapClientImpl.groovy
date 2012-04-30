@@ -187,7 +187,7 @@ class JiraSoapClientImpl implements JiraSoapClient {
         }
     }
 
-    private maskRemoteException(Class<?> ignore, Closure closure) {
+    private maskRemoteException(String ignore, Closure closure) {
         try {
             return closure()
         } catch (Exception ex) {
@@ -195,10 +195,7 @@ class JiraSoapClientImpl implements JiraSoapClient {
             // The only possible way to identify the root cause is the toString
             // method. The root cause is not listed as ex.cause neither
             // part of ex.suppressed or ex.message.
-            println ex.toString()
-
-            if (ex.toString().contains(ignore.name)) {
-                println "Ignoring exception"
+            if (ignore != null && ex.toString().contains(ignore)) {
                 return
             }
 
@@ -210,13 +207,13 @@ class JiraSoapClientImpl implements JiraSoapClient {
         }
     }
 
+    private maskRemoteException(Class<?> ignore, Closure closure) {
+        return maskRemoteException(ignore.name, closure)
+    }
+
     private maskRemoteException(Closure closure) {
-        try {
-            return closure()
-        } catch (RemoteException ex) {
-            println "Original exception ${ex.class.name}"
-            println "Wrapped exception ${ex.cause}"
-            throw new AtlassianException(ex)
-        }
+        // the casting is necessary for the Java compiler to be able to
+        // identify which overloaded method should be called.
+        return maskRemoteException((String) null, closure)
     }
 }

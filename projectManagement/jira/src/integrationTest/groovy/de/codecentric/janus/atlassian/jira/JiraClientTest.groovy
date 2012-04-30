@@ -19,6 +19,7 @@ package de.codecentric.janus.atlassian.jira
 import org.junit.Before
 import org.junit.Test
 import com.atlassian.jira.rpc.soap.beans.*
+import org.junit.Ignore
 
 /**
  * @author Ben Ripkens <bripkens.dev@gmail.com>
