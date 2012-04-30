@@ -26,7 +26,9 @@ class ConfluenceSession {
     }
 
     void close() {
-        confluenceSoapSession.close()
+        if (confluenceSoapSession != null) {
+            confluenceSoapSession.close()
+        }
     }
 
     private ConfluenceSoapSession getConfluenceSoapSession() {

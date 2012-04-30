@@ -55,4 +55,30 @@ class ConfluenceClient implements ConfluenceSoapClient {
         session.confluenceSoapClient
                 .removeAllAnonymousPermissionsFromSpace(spaceKey)
     }
+
+    @Override
+    Collection<String> getPermissions(String spaceKey) {
+        return session.confluenceSoapClient.getPermissions(spaceKey)
+    }
+
+    @Override
+    void addPermissionToSpace(SpacePermission permission, String entityName, String spaceKey) {
+        session.confluenceSoapClient.addPermissionToSpace(permission,
+                entityName, spaceKey)
+    }
+
+    @Override
+    void addGroup(String name) {
+        session.confluenceSoapClient.addGroup(name)
+    }
+
+    @Override
+    void deleteGroup(String groupName) {
+        session.confluenceSoapClient.deleteGroup(groupName)
+    }
+
+    @Override
+    boolean hasGroup(String groupName) {
+        return session.confluenceSoapClient.hasGroup(groupName)
+    }
 }

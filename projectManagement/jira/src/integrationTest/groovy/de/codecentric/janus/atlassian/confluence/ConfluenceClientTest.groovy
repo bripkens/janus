@@ -1,7 +1,5 @@
 package de.codecentric.janus.atlassian.confluence
 
-import de.codecentric.janus.atlassian.jira.JiraSession
-import de.codecentric.janus.atlassian.jira.JiraClient
 import org.junit.Before
 import org.junit.Test
 import com.atlassian.confluence.rpc.soap.beans.RemoteSpace
@@ -45,6 +43,12 @@ class ConfluenceClientTest {
         return client.getUser(TEST_USER_USERNAME)
     }
 
+    def createTestGroup() {
+        // for idempotent test
+        client.deleteGroup(TEST_GROUP_NAME)
+        client.addGroup(TEST_GROUP_NAME)
+    }
+
     def createTestSpace() {
         // for idempotent test
         client.deleteSpace(TEST_SPACE_KEY)
@@ -64,6 +68,9 @@ class ConfluenceClientTest {
 
         client.deleteUser(TEST_USER_USERNAME)
         client.deleteUser(TEST_USER_USERNAME)
+
+        client.deleteGroup(TEST_GROUP_NAME)
+        client.deleteGroup(TEST_GROUP_NAME)
     }
 
     @Test void shouldAddSpace() {
@@ -83,9 +90,30 @@ class ConfluenceClientTest {
         RemoteSpace space = createTestSpace()
         client.removeAllAnonymousPermissionsFromSpace(space.key)
 
-        // The current version of the API does not enable verification
-        // whether all the permissions were actually revoked
-        // (although possible, it is very time consuming).
-        // The last manual verification was done on 2012-04-30.
+        ConfluenceSession anonSession = new ConfluenceSession(BASE_URL)
+        ConfluenceClient anonClient = new ConfluenceClient(session)
+        Collection<String> permissions = anonClient.getPermissions(TEST_SPACE_KEY)
+        anonSession.close()
+
+        // For some reason this collection always contains
+        // [view, modify, comment, admin]
+        // even though the permissions were removed. This was verified manually
+        // on 2012-04-30 using the Confluence admin menu and an anonymous user
+        // session.
+    }
+
+    @Test void shouldCreateGroup() {
+        createTestGroup()
+        assert client.hasGroup(TEST_GROUP_NAME)
+    }
+
+    @Test void shouldAddPermissionToSpace() {
+        RemoteSpace space = createTestSpace()
+        SpacePermission permission = SpacePermission.CREATE_PAGE
+        createTestGroup()
+
+        client.addPermissionToSpace(permission, TEST_GROUP_NAME, space.key)
+
+        // Can not be validated automatically as of 2012-04-30
     }
 }

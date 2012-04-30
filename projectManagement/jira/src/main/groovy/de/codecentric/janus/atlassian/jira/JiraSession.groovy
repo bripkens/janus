@@ -39,7 +39,9 @@ class JiraSession {
     }
 
     void close() {
-        jiraSoapSession.close()
+        if (jiraSoapSession != null) {
+            jiraSoapSession.close()
+        }
     }
 
     private JiraSoapSession getJiraSoapSession() {

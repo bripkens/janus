@@ -81,6 +81,43 @@ class ConfluenceSoapClientImpl implements ConfluenceSoapClient {
         }
     }
 
+    @Override
+    Collection<String> getPermissions(String spaceKey) {
+        return maskRemoteException {
+            return service.getPermissions(token, spaceKey)
+        }
+    }
+
+    @Override
+    void addPermissionToSpace(SpacePermission permission, String entityName,
+                              String spaceKey) {
+        maskRemoteException {
+            service.addPermissionToSpace(token, permission.key, entityName,
+                    spaceKey)
+        }
+    }
+
+    @Override
+    void addGroup(String name) {
+        maskRemoteException {
+            service.addGroup(token, name)
+        }
+    }
+
+    @Override
+    void deleteGroup(String groupName) {
+        maskRemoteException('does not exist') {
+            service.removeGroup(token, groupName, null)
+        }
+    }
+
+    @Override
+    boolean hasGroup(String groupName) {
+        return maskRemoteException {
+            return service.hasGroup(token, groupName)
+        }
+    }
+
     private maskRemoteException(String ignore, Closure closure) {
         try {
             return closure()

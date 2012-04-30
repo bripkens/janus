@@ -16,4 +16,10 @@ interface ConfluenceSoapClient {
     void removeAnonymousPermissionFromSpace(SpacePermission permission,
                                             String spaceKey)
     void removeAllAnonymousPermissionsFromSpace(String spaceKey)
+    Collection<String> getPermissions(String spaceKey)
+    void addPermissionToSpace(SpacePermission permission, String entityName,
+                              String spaceKey)
+    void addGroup(String name)
+    void deleteGroup(String groupName)
+    boolean hasGroup(String groupName)
 }
