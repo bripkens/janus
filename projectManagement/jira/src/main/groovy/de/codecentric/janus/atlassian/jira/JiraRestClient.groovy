@@ -24,7 +24,7 @@ import com.atlassian.jira.rpc.soap.beans.RemoteUser;
  * @author Ben Ripkens <bripkens.dev@gmail.com>
  */
 public interface JiraRestClient {
-    RemoteGroupSummary[] getGroups()
+    RemoteGroupSummary[] searchGroups(String query)
     RemoteProjectSummary[] getProjects()
     RemoteUser[] searchUser(String name)
 }

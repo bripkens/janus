@@ -153,8 +153,8 @@ class JiraClient implements JiraSoapClient, JiraRestClient {
     }
 
     @Override
-    RemoteGroupSummary[] getGroups() {
-        return session.getJiraRestClient().getGroups()
+    RemoteGroupSummary[] searchGroups(String query) {
+        return session.getJiraRestClient().searchGroups(query)
     }
 
     @Override

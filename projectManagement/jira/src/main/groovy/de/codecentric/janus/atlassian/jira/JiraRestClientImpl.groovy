@@ -45,10 +45,10 @@ class JiraRestClientImpl implements JiraRestClient {
     }
 
     @Override
-    RemoteGroupSummary[] getGroups() {
+    RemoteGroupSummary[] searchGroups(String query) {
         def result = []
 
-        get(baseUrl, PATH.GET_ALL_GROUPS) { HttpResponse resp ->
+        get(baseUrl, PATH.GET_ALL_GROUPS, ['query': query]) { HttpResponse resp ->
             HttpEntity entity = resp.entity
 
             def slurper = new JsonSlurper()

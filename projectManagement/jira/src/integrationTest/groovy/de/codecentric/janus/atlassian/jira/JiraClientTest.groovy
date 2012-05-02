@@ -117,7 +117,9 @@ class JiraClientTest {
 
         assert group.name == TEST_GROUP_NAME
         assert client.getGroup(TEST_GROUP_NAME).name == TEST_GROUP_NAME
-        assert client.getGroups().any { it.name == TEST_GROUP_NAME }
+        assert client.searchGroups(TEST_GROUP_NAME).any {
+            it.name == TEST_GROUP_NAME
+        }
     }
 
     @Test void shouldCreateUser() {
