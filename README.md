@@ -16,6 +16,11 @@ A Janus user interface is available through a [Jenkins plug-in](https://github.c
 
 # Version History
 
+## 0.5
+
+ - various minor bug fixes and extensions of the JIRA and Confluence SOAP and
+   REST API.
+
 ## 0.4
 
  - scaffold DSL now supports a wider range of standard build job steps:
@@ -24,7 +29,6 @@ A Janus user interface is available through a [Jenkins plug-in](https://github.c
  - Jenkins CI config generator support for the new build steps (UC-10).
  - JIRA SOAP and REST API wrapper (UC-11).
  - Basic Confluence SOAP API wrapper (UC-11).
-
 
 ## 0.3
 
